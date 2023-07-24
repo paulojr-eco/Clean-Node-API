@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "coverage": "vitest run --coverage",
-    "test:tsaged": "vitest",
+    "test:staged": "vitest --passWithNoTests",
     "prepare": "husky install"
   },
   "keywords": [],
