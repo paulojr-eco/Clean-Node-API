@@ -13,5 +13,6 @@ describe('SignUp Controller', () => {
     };
     const httpResponse = sut.handle(httpReqeust);
     expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new Error('Missing parameter: name'));
   });
 });
