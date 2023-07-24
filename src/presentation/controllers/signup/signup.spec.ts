@@ -1,4 +1,3 @@
-import { test, expect, describe, vi } from 'vitest';
 import { SignUpController } from './signup';
 import { MissingParamError, InvalidParamError, ServerError } from '../../errors';
 import { type EmailValidator, type AddAccount, type AddAccountModel, type AccountModel } from './signup-protocols';

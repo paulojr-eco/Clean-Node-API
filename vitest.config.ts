@@ -1,11 +1,12 @@
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   test: {
+    globals: true,
     coverage: {
-      provider: 'istanbul',
-    },
+      provider: 'istanbul'
+    }
   },
-  plugins: [tsconfigPaths()],
+  plugins: [tsconfigPaths()]
 });

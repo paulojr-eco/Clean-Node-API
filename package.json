@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest --passWithNoTests",
-    "coverage": "vitest run --coverage",
+    "test": "vitest --passWithNoTests --silent --no-threads",
+    "test:unit": "npm test -- --config vitest-unit.config.ts",
+    "test:integration": "npm test -- --config vitest-integration.config.ts",
+    "test:ci": "npm test -- run --coverage",
     "test:staged": "vitest run --passWithNoTests",
     "prepare": "husky install"
   },
@@ -17,15 +19,16 @@
     "@commitlint/config-conventional": "^17.6.7",
     "@types/node": "^20.4.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@vitest/coverage-istanbul": "^0.33.0",
     "eslint": "^8.45.0",
     "eslint-config-standard-with-typescript": "^37.0.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "typescript": "^5.1.6",
-    "vite": "^4.4.6",
+    "vite": "^4.4.7",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.33.0"
   }
