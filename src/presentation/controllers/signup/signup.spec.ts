@@ -78,7 +78,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'any_email@email.com',
+        email: 'any_email@mail.com',
         passwordConfirmation: 'any_password'
       }
     };
@@ -92,7 +92,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'any_email@email.com',
+        email: 'any_email@mail.com',
         password: 'any_password'
       }
     };
@@ -106,7 +106,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'any_email@email.com',
+        email: 'any_email@mail.com',
         password: 'any_password',
         passwordConfirmation: 'invalid_password'
       }
@@ -122,7 +122,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'inavlid_email@email.com',
+        email: 'inavlid_email@mail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password'
       }
@@ -138,13 +138,13 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'any_email@email.com',
+        email: 'any_email@mail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password'
       }
     };
     sut.handle(httpRequest);
-    expect(isValidSpy).toHaveBeenCalledWith('any_email@email.com');
+    expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com');
   });
 
   test('Should return 500 if EmailValidator throws', () => {
@@ -155,7 +155,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'any_email@email.com',
+        email: 'any_email@mail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password'
       }
@@ -173,7 +173,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
       body: {
         name: 'any_name',
-        email: 'any_email@email.com',
+        email: 'any_email@mail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password'
       }
@@ -199,6 +199,26 @@ describe('SignUp Controller', () => {
       name: 'any_name',
       email: 'any_email@mail.com',
       password: 'any_password'
+    });
+  });
+
+  test('Should return 200 if valid data is provided', () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
     });
   });
 });
