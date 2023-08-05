@@ -6,8 +6,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'istanbul'
-    },
-    setupFiles: ['./setup/mongo-memory-server.ts']
+    }
   },
   plugins: [tsconfigPaths()]
 });
