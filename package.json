@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "sucrase-node src/main/server.ts",
     "test": "vitest --passWithNoTests --silent --no-threads",
     "test:unit": "npm test -- --config vitest-unit.config.ts",
     "test:integration": "npm test -- --config vitest-integration.config.ts",
@@ -18,6 +19,7 @@
     "@commitlint/cli": "^17.6.7",
     "@commitlint/config-conventional": "^17.6.7",
     "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.17",
     "@types/mongodb": "^4.0.7",
     "@types/node": "^20.4.4",
     "@types/validator": "^13.7.17",
@@ -30,6 +32,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
+    "sucrase": "^3.34.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.7",
     "vite-tsconfig-paths": "^4.2.0",
@@ -38,6 +41,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
     "mongodb": "^5.7.0",
     "validator": "^13.9.0"
   }
