@@ -1,8 +1,9 @@
 import { type Collection, MongoClient } from 'mongodb';
+import env from '../../../../main/config/env';
 
 export const MongoHelper = {
   client: new MongoClient(
-    process.env.MONGO_URL ?? 'mongodb://localhost:27017',
+    env.mongoUrl,
     {
       monitorCommands: true
     }
