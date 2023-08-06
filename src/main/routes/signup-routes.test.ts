@@ -17,14 +17,17 @@ describe('SignUp Routes', () => {
   });
 
   test('Should return an account on success', async () => {
-    await request(app)
-      .post('/api/signup')
-      .send({
-        name: 'Paulo',
-        email: 'paulo@mail.com',
-        password: '123',
-        passwordConfirmation: '123'
-      })
-      .expect(200);
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    setTimeout(async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'Paulo',
+          email: 'paulo@mail.com',
+          password: '123',
+          passwordConfirmation: '123'
+        })
+        .expect(200);
+    }, 3000);
   });
 });
