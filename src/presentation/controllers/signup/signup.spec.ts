@@ -183,6 +183,17 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new ServerError());
   });
 
+  test('Should throw a generic error if throws an error that is not a instance of Error', async () => {
+    const { sut, addAccountStub } = makeSut();
+    vi.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return await Promise.reject(null);
+    });
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse.statusCode).toEqual(500);
+    expect(httpResponse.body).toEqual(new ServerError('Error while handle signup'));
+  });
+
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut();
     const addSpy = vi.spyOn(addAccountStub, 'add');
