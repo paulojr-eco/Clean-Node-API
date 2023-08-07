@@ -2,17 +2,22 @@ import { MongoHelper } from '../helpers/mongo-helper';
 import { AccountMongoRepository } from './account';
 
 describe('Account Mongo Repository', () => {
+  const cleanCollection = async (collectionName: string): Promise<void> => {
+    const collection = await MongoHelper.getCollection(collectionName);
+    await collection.deleteMany({});
+  };
+
   beforeAll(async () => {
     await MongoHelper.connect();
   });
 
   afterAll(async () => {
+    await cleanCollection('accounts');
     await MongoHelper.disconnect();
   });
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts');
-    await accountCollection.deleteMany({});
+    await cleanCollection('accounts');
   });
 
   const makeSut = (): AccountMongoRepository => {
