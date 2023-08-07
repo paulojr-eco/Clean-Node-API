@@ -35,7 +35,10 @@ export class SignUpController implements Controller {
       return successful(account);
     } catch (error) {
       console.error(error);
-      return serverError();
+      if (error instanceof Error) {
+        return serverError(error);
+      }
+      return serverError(new Error('Error while handle signup'));
     }
   }
 }
