@@ -1,7 +1,14 @@
 import { LoginController } from './login';
-import { badRequest, serverError } from 'presentation/helpers/http-helper';
+import {
+  badRequest,
+  serverError,
+  unauthorized
+} from 'presentation/helpers/http-helper';
 import { InvalidParamError, MissingParamError } from 'presentation/errors';
-import { type HttpRequest, type EmailValidator } from '../signup/signup-protocols';
+import {
+  type HttpRequest,
+  type EmailValidator
+} from '../signup/signup-protocols';
 import { type Authentication } from 'domain/usecases/authentication';
 
 const makeEmailValidator = (): EmailValidator => {
@@ -16,7 +23,9 @@ const makeEmailValidator = (): EmailValidator => {
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth (email: string, password: string): Promise<string> {
-      return await new Promise(resolve => { resolve('any_token'); });
+      return await new Promise((resolve) => {
+        resolve('any_token');
+      });
     }
   }
   return new AuthenticationStub();
@@ -93,5 +102,16 @@ describe('Login Controller', () => {
     const authSpy = vi.spyOn(authenticationStub, 'auth');
     await sut.handle(makeFakeRequest());
     expect(authSpy).toHaveBeenCalledWith('any_email@mail.com', 'any_password');
+  });
+
+  test('Should return 401 if invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut();
+    vi.spyOn(authenticationStub, 'auth').mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolve(null);
+      })
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(unauthorized());
   });
 });
