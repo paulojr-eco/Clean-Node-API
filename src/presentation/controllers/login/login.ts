@@ -8,10 +8,10 @@ import {
   type EmailValidator,
   type Controller,
   type HttpRequest,
-  type HttpResponse
-} from '../signup/signup-protocols';
+  type HttpResponse,
+  type Authentication
+} from './login-protocols';
 import { InvalidParamError, MissingParamError } from 'presentation/errors';
-import { type Authentication } from 'domain/usecases/authentication';
 
 export class LoginController implements Controller {
   private readonly emailValidator;

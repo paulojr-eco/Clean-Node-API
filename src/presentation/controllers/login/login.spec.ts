@@ -7,9 +7,9 @@ import {
 import { InvalidParamError, MissingParamError } from 'presentation/errors';
 import {
   type HttpRequest,
-  type EmailValidator
-} from '../signup/signup-protocols';
-import { type Authentication } from 'domain/usecases/authentication';
+  type EmailValidator,
+  type Authentication
+} from './login-protocols';
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
