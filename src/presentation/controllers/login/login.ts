@@ -1,7 +1,8 @@
 import {
   badRequest,
   serverError,
-  successful
+  successful,
+  unauthorized
 } from 'presentation/helpers/http-helper';
 import {
   type EmailValidator,
@@ -33,7 +34,10 @@ export class LoginController implements Controller {
       if (!isValid) {
         return badRequest(new InvalidParamError('email'));
       }
-      await this.authentication.auth(email, password);
+      const accessToken = await this.authentication.auth(email, password);
+      if (!accessToken) {
+        return unauthorized();
+      }
       return successful('');
     } catch (error) {
       console.error(error);
