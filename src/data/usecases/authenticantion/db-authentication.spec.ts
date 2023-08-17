@@ -100,4 +100,13 @@ describe('DbAuthentication UseCase', () => {
     const promise = sut.auth(makeFakeAuthentication());
     await expect(promise).rejects.toThrow();
   });
+
+  test('Should return null if HashComparer returns false', async () => {
+    const { sut, hashComparerStub } = makeSut();
+    vi.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(
+      Promise.resolve(false)
+    );
+    const acessToken = await sut.auth(makeFakeAuthentication());
+    expect(acessToken).toBeNull();
+  });
 });
