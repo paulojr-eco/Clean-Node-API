@@ -5,7 +5,7 @@ import {
   successful,
   unauthorized
 } from 'presentation/helpers/http-helper';
-import { MissingParamError } from 'presentation/errors';
+import { MissingParamError, ServerError } from 'presentation/errors';
 import {
   type HttpRequest,
   type Authentication,
@@ -104,6 +104,19 @@ describe('Login Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('any_field'))
+    );
+  });
+
+  test('Should throw a generic error if LoginController throws an error that is not a instance of Error', async () => {
+    const { sut, authenticationStub } = makeSut();
+    vi.spyOn(authenticationStub, 'auth').mockImplementationOnce(async () => {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return await Promise.reject(null);
+    });
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse.statusCode).toEqual(500);
+    expect(httpResponse.body).toEqual(
+      new ServerError('Error while handle login')
     );
   });
 });
