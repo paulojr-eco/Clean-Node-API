@@ -1,4 +1,4 @@
-import { InvalidParamError } from 'presentation/errors';
+import { InvalidParamError } from '../../../presentation/errors';
 import { type Validation } from './validation';
 
 export class ComprareFieldsValidation implements Validation {
