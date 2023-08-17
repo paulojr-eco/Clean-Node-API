@@ -4,7 +4,7 @@ import {
   type HttpRequest
 } from 'presentation/protocols';
 import { LogControllerDecorator } from './log';
-import { serverError, successful } from 'presentation/helpers/http-helper';
+import { serverError, successful } from 'presentation/helpers/http/http-helper';
 import { type LogErrorRepository } from 'data/protocols/log-error-repository';
 import { type AccountModel } from 'domain/models/account';
 

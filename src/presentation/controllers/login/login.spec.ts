@@ -4,7 +4,7 @@ import {
   serverError,
   successful,
   unauthorized
-} from 'presentation/helpers/http-helper';
+} from 'presentation/helpers/http/http-helper';
 import { MissingParamError, ServerError } from 'presentation/errors';
 import {
   type HttpRequest,

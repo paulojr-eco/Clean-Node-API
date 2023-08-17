@@ -1,5 +1,5 @@
 import { InvalidParamError } from '../../../presentation/errors';
-import { type Validation } from './validation';
+import { type Validation } from '../../protocols/validation';
 
 export class ComprareFieldsValidation implements Validation {
   private readonly fieldName: string;

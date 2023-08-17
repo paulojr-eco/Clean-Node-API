@@ -3,7 +3,7 @@ import {
   serverError,
   successful,
   unauthorized
-} from '../../../presentation/helpers/http-helper';
+} from '../../helpers/http/http-helper';
 import {
   type Controller,
   type HttpRequest,
