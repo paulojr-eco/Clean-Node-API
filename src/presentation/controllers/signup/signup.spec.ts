@@ -12,6 +12,7 @@ import {
   type HttpRequest,
   type Validation
 } from './signup-protocols';
+import { badRequest } from 'presentation/helpers/http-helper';
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -68,7 +69,11 @@ const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
   const addAccountStub = makeAddAccount();
   const validationStub = makeValidation();
-  const sut = new SignUpController(emailValidatorStub, addAccountStub, validationStub);
+  const sut = new SignUpController(
+    emailValidatorStub,
+    addAccountStub,
+    validationStub
+  );
   return {
     sut,
     emailValidatorStub,
@@ -204,7 +209,9 @@ describe('SignUp Controller', () => {
     });
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse.statusCode).toEqual(500);
-    expect(httpResponse.body).toEqual(new ServerError('Error while handle signup'));
+    expect(httpResponse.body).toEqual(
+      new ServerError('Error while handle signup')
+    );
   });
 
   test('Should call AddAccount with correct values', async () => {
@@ -236,5 +243,16 @@ describe('SignUp Controller', () => {
     const httpRequest = makeFakeRequest();
     await sut.handle(httpRequest);
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  test('Should return 400 if Validation returns a error', async () => {
+    const { sut, validationStub } = makeSut();
+    vi.spyOn(validationStub, 'validate').mockReturnValueOnce(
+      new MissingParamError('any_field')
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('any_field'))
+    );
   });
 });
