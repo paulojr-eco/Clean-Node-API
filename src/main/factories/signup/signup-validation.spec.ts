@@ -1,12 +1,12 @@
-import { RequiredFieldValidation } from '../../presentation/helpers/validators/required-field-validation';
+import { RequiredFieldValidation } from '../../../presentation/helpers/validators/required-field-validation';
 import { makeSignUpValidation } from './signup-validation';
-import { type Validation } from '../../presentation/helpers/validators/validation';
-import { ComprareFieldsValidation } from '../../presentation/helpers/validators/compare-fields-validation';
-import { EmailValidation } from '../../presentation/helpers/validators/email-validation';
-import { type EmailValidator } from '../../presentation/protocols/email-validator';
-import { ValidationComposite } from '../../presentation/helpers/validators/validation-composite';
+import { type Validation } from '../../../presentation/helpers/validators/validation';
+import { ComprareFieldsValidation } from '../../../presentation/helpers/validators/compare-fields-validation';
+import { EmailValidation } from '../../../presentation/helpers/validators/email-validation';
+import { type EmailValidator } from '../../../presentation/protocols/email-validator';
+import { ValidationComposite } from '../../../presentation/helpers/validators/validation-composite';
 
-vi.mock('../../presentation/helpers/validators/validation-composite');
+vi.mock('../../../presentation/helpers/validators/validation-composite');
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
