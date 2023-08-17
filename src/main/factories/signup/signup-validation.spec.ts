@@ -1,10 +1,12 @@
-import { RequiredFieldValidation } from '../../../presentation/helpers/validators/required-field-validation';
+import {
+  RequiredFieldValidation,
+  ComprareFieldsValidation,
+  EmailValidation,
+  ValidationComposite
+} from '../../../presentation/helpers/validators';
 import { makeSignUpValidation } from './signup-validation';
 import { type Validation } from '../../../presentation/protocols/validation';
-import { ComprareFieldsValidation } from '../../../presentation/helpers/validators/compare-fields-validation';
-import { EmailValidation } from '../../../presentation/helpers/validators/email-validation';
 import { type EmailValidator } from '../../../presentation/protocols/email-validator';
-import { ValidationComposite } from '../../../presentation/helpers/validators/validation-composite';
 
 vi.mock('../../../presentation/helpers/validators/validation-composite');
 
@@ -24,7 +26,9 @@ describe('SignUpValidation Factory', () => {
     for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
       validations.push(new RequiredFieldValidation(field));
     }
-    validations.push(new ComprareFieldsValidation('password', 'passwordConfirmation'));
+    validations.push(
+      new ComprareFieldsValidation('password', 'passwordConfirmation')
+    );
     validations.push(new EmailValidation('email', makeEmailValidator()));
     expect(ValidationComposite).toHaveBeenCalledWith(validations);
   });
