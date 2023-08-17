@@ -24,8 +24,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 };
 
 const makeHashComparer = (): HashComparer => {
-  class HashComparerStub
-  implements HashComparer {
+  class HashComparerStub implements HashComparer {
     async compare (value: string, hash: string): Promise<boolean> {
       return await new Promise((resolve) => {
         resolve(true);
@@ -49,7 +48,10 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
   const hashComparerStub = makeHashComparer();
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub);
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub
+  );
   return {
     sut,
     loadAccountByEmailRepositoryStub,
@@ -72,6 +74,15 @@ describe('DbAuthentication UseCase', () => {
     );
     const promise = sut.auth(makeFakeAuthentication());
     await expect(promise).rejects.toThrow();
+  });
+
+  test('Should return null if LoadAccountByEmailRepository returns null', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    vi.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
+      Promise.resolve(null)
+    );
+    const acessToken = await sut.auth(makeFakeAuthentication());
+    expect(acessToken).toBeNull();
   });
 
   test('Should call HashComparer with correct values', async () => {
