@@ -1,8 +1,15 @@
 import { type Collection } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { AccountMongoRepository } from './account';
+import { type AddAccountModel } from 'domain/usecases/add-account';
 
 let accountCollection: Collection;
+
+const makeFakeAccount = (): AddAccountModel => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password'
+});
 
 describe('Account Mongo Repository', () => {
   const cleanCollection = async (collectionName: string): Promise<void> => {
@@ -29,11 +36,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should return an account on add success', async () => {
     const sut = makeSut();
-    const account = await sut.add({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
-    });
+    const account = await sut.add(makeFakeAccount());
     expect(account).toBeTruthy();
     expect(account.id).toBeTruthy();
     expect(account.name).toBe('any_name');
@@ -43,11 +46,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should return an account on loadByEmail success', async () => {
     const sut = makeSut();
-    await accountCollection.insertOne({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
-    });
+    await accountCollection.insertOne(makeFakeAccount());
     const account = await sut.loadByEmail('any_email@mail.com');
     expect(account).toBeTruthy();
     expect(account?.id).toBeTruthy();
