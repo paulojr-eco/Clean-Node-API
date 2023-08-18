@@ -39,7 +39,15 @@ describe('Bcrypt Adapter', () => {
 
   test('Should return true when compare succeeds', async () => {
     const sut = makeSut();
+    vi.spyOn(bcrypt, 'compare').mockResolvedValueOnce(true as never);
     const isValid = await sut.compare('any_value', 'any_hash');
     expect(isValid).toBe(true);
+  });
+
+  test('Should return false when compare fails', async () => {
+    const sut = makeSut();
+    vi.spyOn(bcrypt, 'compare').mockReturnValueOnce(Promise.resolve(false) as any);
+    const isValid = await sut.compare('any_value', 'any_hash');
+    expect(isValid).toBe(false);
   });
 });
