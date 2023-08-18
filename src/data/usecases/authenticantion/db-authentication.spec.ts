@@ -40,10 +40,8 @@ const makeHashComparer = (): HashComparer => {
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
-    async encrypt (id: string): Promise<string> {
-      return await new Promise((resolve) => {
-        resolve('any_token');
-      });
+    encrypt (id: string): string {
+      return 'any_token';
     }
   }
   return new EncrypterStub();
@@ -154,9 +152,9 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should throw if Encrypter throws', async () => {
     const { sut, encrypterStub } = makeSut();
-    vi.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
-      Promise.reject(new Error())
-    );
+    vi.spyOn(encrypterStub, 'encrypt').mockImplementation(() => {
+      throw new Error();
+    });
     const promise = sut.auth(makeFakeAuthentication());
     await expect(promise).rejects.toThrow();
   });
