@@ -50,7 +50,7 @@ const makeEncrypter = (): Encrypter => {
 const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
   class UpdatedAccessTokenRepositoryStub
   implements UpdateAccessTokenRepository {
-    async update (id: string, token: string): Promise<void> {
+    async updateAccessToken (id: string, token: string): Promise<void> {
       await new Promise<void>((resolve) => {
         resolve();
       });
@@ -165,16 +165,16 @@ describe('DbAuthentication UseCase', () => {
     expect(accessToken).toBe('any_token');
   });
 
-  test('Should call UpdateAcessTokenRepository with correct values', async () => {
+  test('Should call UpdateAccessTokenRepository with correct values', async () => {
     const { sut, updatedAccessTokenRepositoryStub } = makeSut();
-    const updateSpy = vi.spyOn(updatedAccessTokenRepositoryStub, 'update');
+    const updateSpy = vi.spyOn(updatedAccessTokenRepositoryStub, 'updateAccessToken');
     await sut.auth(makeFakeAuthentication());
     expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token');
   });
 
-  test('Should throw if UpdateAcessTokenRepository throws', async () => {
+  test('Should throw if UpdateAccessTokenRepository throws', async () => {
     const { sut, updatedAccessTokenRepositoryStub } = makeSut();
-    vi.spyOn(updatedAccessTokenRepositoryStub, 'update').mockReturnValueOnce(
+    vi.spyOn(updatedAccessTokenRepositoryStub, 'updateAccessToken').mockReturnValueOnce(
       Promise.reject(new Error())
     );
     const promise = sut.auth(makeFakeAuthentication());
