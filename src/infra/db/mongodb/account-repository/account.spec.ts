@@ -1,4 +1,4 @@
-import { type Collection } from 'mongodb';
+import { ObjectId, type Collection } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { AccountMongoRepository } from './account';
 import { type AddAccountModel } from 'domain/usecases/add-account';
@@ -59,5 +59,18 @@ describe('Account Mongo Repository', () => {
     const sut = makeSut();
     const account = await sut.loadByEmail('any_email@mail.com');
     expect(account).toBeFalsy();
+  });
+
+  test('Should update the account accessToken on updateAccessToken success', async () => {
+    const sut = makeSut();
+    await accountCollection.insertOne(makeFakeAccount());
+    let res = await accountCollection.findOne(makeFakeAccount());
+    let account = MongoHelper.map(res);
+    expect(account.accessToken).toBeFalsy();
+    await sut.updateAccessToken(account.id, 'any_token');
+    res = await accountCollection.findOne({ _id: new ObjectId(account.id) });
+    account = MongoHelper.map(res);
+    expect(account).toBeTruthy();
+    expect(account.accessToken).toBe('any_token');
   });
 });
