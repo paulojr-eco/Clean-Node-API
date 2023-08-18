@@ -7,14 +7,14 @@ const makeSut = (): BcryptAdapter => {
 };
 
 describe('Bcrypt Adapter', () => {
-  test('Should call bcrypt with correct values', async () => {
+  test('Should call hash with correct values', async () => {
     const sut = makeSut();
     const hashSpy = vi.spyOn(bcrypt, 'hash');
     await sut.hash('any_value');
     expect(hashSpy).toHaveBeenCalledWith('any_value', salt);
   });
 
-  test('Should return a hash on success', async () => {
+  test('Should return a valid hash on hash success', async () => {
     const sut = makeSut();
     vi.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hash' as never);
     const hash = await sut.hash('any_value');
@@ -28,5 +28,12 @@ describe('Bcrypt Adapter', () => {
     });
     const promise = sut.hash('any_value');
     await expect(promise).rejects.toThrow();
+  });
+
+  test('Should call compare with correct values', async () => {
+    const sut = makeSut();
+    const compareSpy = vi.spyOn(bcrypt, 'compare');
+    await sut.compare('any_value', 'any_hash');
+    expect(compareSpy).toHaveBeenCalledWith('any_value', 'any_hash');
   });
 });
