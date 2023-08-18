@@ -8,4 +8,12 @@ describe('Jwt Adapter', () => {
     sut.encrypt('any_id');
     expect(signSpy).toHaveBeenCalledWith({ id: 'any_id' }, 'secret');
   });
+
+  test('Should return a token on sign success', async () => {
+    const sut = new JwtAdapter('secret');
+    /** @ts-expect-error @description Sign method returns a string but TS in infering that returns void */
+    vi.spyOn(jwt, 'sign').mockReturnValueOnce('any_token');
+    const accessToken = sut.encrypt('any_id');
+    expect(accessToken).toBe('any_token');
+  });
 });
