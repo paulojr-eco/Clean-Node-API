@@ -16,8 +16,9 @@ describe('Bcrypt Adapter', () => {
 
   test('Should return a valid hash on hash success', async () => {
     const sut = makeSut();
-    /** @ts-expect-error @description hash method returns a Promise<string> but TS in infering that returns void */
-    vi.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hash');
+    vi.spyOn(bcrypt, 'hash').mockImplementationOnce(async () => {
+      return await new Promise(resolve => { resolve('hash'); });
+    });
     const hash = await sut.hash('any_value');
     expect(hash).toBe('hash');
   });
@@ -40,8 +41,9 @@ describe('Bcrypt Adapter', () => {
 
   test('Should return true when compare succeeds', async () => {
     const sut = makeSut();
-    /** @ts-expect-error @description compare method returns a Promise<boolean> but TS in infering that returns void */
-    vi.spyOn(bcrypt, 'compare').mockResolvedValueOnce(true);
+    vi.spyOn(bcrypt, 'compare').mockImplementationOnce(async () => {
+      return await new Promise(resolve => { resolve(true); });
+    });
     const isValid = await sut.compare('any_value', 'any_hash');
     expect(isValid).toBe(true);
   });
