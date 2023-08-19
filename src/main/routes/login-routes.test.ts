@@ -25,9 +25,10 @@ describe('Login Routes', () => {
   });
 
   describe('/POST signup', () => {
-    test('Should return 200 on signup', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      setTimeout(async () => {
+    test.concurrent(
+      'Should return 200 on signup',
+      async () => {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         await request(app)
           .post('/api/signup')
           .send({
@@ -37,8 +38,9 @@ describe('Login Routes', () => {
             passwordConfirmation: '123'
           })
           .expect(200);
-      }, 3000);
-    });
+      },
+      10000
+    );
   });
 
   describe('/POST login', () => {
