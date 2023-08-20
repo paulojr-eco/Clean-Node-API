@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "node dist/main/server.js",
+    "build": "rimraf dist && tsc",
+    "dev": "sucrase-node src/main/server.ts",
     "test": "vitest --passWithNoTests --silent --no-threads",
     "test:unit": "npm test -- --config vitest-unit.config.ts",
     "test:integration": "npm test -- --config vitest-integration.config.ts",
@@ -34,6 +36,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
+    "rimraf": "^5.0.1",
     "sucrase": "^3.34.0",
     "supertest": "^6.3.3",
     "typescript": "^5.1.6",
@@ -45,7 +48,6 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "express": "^4.18.2",
-    "fast-glob": "^3.3.1",
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.7.0",
     "validator": "^13.9.0"
