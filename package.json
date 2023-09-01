@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
-    "debug": "node --inspect=0.0.0.0:9222 --nolazy dist/main/server.js",
-    "up": "npm run build && docker-compose up",
+    "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
+    "up": "npm run build && docker-compose up -d",
     "down": "docker-compose down",
     "test": "vitest --passWithNoTests --silent --no-threads",
     "test:unit": "npm test -- --config vitest-unit.config.ts",
@@ -49,10 +49,11 @@
     "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "husky": "^8.0.3",
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.7.0",
-    "validator": "^13.9.0",
-    "husky": "^8.0.3"
+    "nodemon": "^3.0.1",
+    "validator": "^13.9.0"
   },
   "engines": {
     "node": "20.x"
