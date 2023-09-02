@@ -11,7 +11,7 @@
 7. ✅ **Cria** uma conta para o usuário com os dados informados, **substituindo** a senha pela senha criptorafada
 8. ✅ Gera um **token** de acesso a partir do ID do usuário
 9. ✅ **Atualiza** os dados do usuário com o token de acesso gerado
-10. ⏳ Retorna **200** com o token de acesso e o nome do usuário (em breve...)
+10. ✅ Retorna **200** com o token de acesso e o nome do usuário
 
 > ## Exceções
 
@@ -19,8 +19,8 @@
 2. ✅ Retorna erro **400** se name, email, password ou passwordConfirmation não forem fornecidos pelo client
 3. ✅ Retorna erro **400** se password e passwordConfirmation não forem iguais
 4. ✅ Retorna erro **400** se o campo email for um e-mail inválido
-5. ⏳ Retorna erro **403** se o email fornecido já estiver em uso (em breve...)
+5. ✅ Retorna erro **403** se o email fornecido já estiver em uso (em breve...)
 6. ✅ Retorna erro **500** se der erro ao tentar gerar uma senha criptografada
 7. ✅ Retorna erro **500** se der erro ao tentar criar a conta do usuário
-8. ⏳ Retorna erro **500** se der erro ao tentar gerar o token de acesso (em breve...)
-9. ⏳ Retorna erro **500** se der erro ao tentar atualizar o usuário com o token de acesso gerado (em breve...)
+8. ✅ Retorna erro **500** se der erro ao tentar gerar o token de acesso
+9. ✅ Retorna erro **500** se der erro ao tentar atualizar o usuário com o token de acesso gerado
