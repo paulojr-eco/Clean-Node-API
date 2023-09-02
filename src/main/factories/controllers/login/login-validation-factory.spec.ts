@@ -1,9 +1,9 @@
-import { RequiredFieldValidation, ValidationComposite, EmailValidation } from '../../../presentation/helpers/validators';
+import { RequiredFieldValidation, ValidationComposite, EmailValidation } from '../../../../presentation/helpers/validators';
 import { makeLoginValidation } from './login-validation-factory';
-import { type Validation } from '../../../presentation/protocols/validation';
-import { type EmailValidator } from '../../../presentation/protocols/email-validator';
+import { type Validation } from '../../../../presentation/protocols/validation';
+import { type EmailValidator } from '../../../../presentation/protocols/email-validator';
 
-vi.mock('../../../presentation/helpers/validators/validation-composite');
+vi.mock('../../../../presentation/helpers/validators/validation-composite');
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
