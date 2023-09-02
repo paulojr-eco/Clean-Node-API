@@ -5,7 +5,7 @@ import {
   successful,
   unauthorized
 } from '../../helpers/http/http-helper';
-import { MissingParamError, ServerError } from 'presentation/errors';
+import { MissingParamError, ServerError } from '../../errors';
 import {
   type HttpRequest,
   type Authentication,

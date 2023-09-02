@@ -12,7 +12,7 @@ import {
   serverError,
   successful
 } from '../../helpers/http/http-helper';
-import { EmailInUseError } from '../../../presentation/errors';
+import { EmailInUseError } from '../../errors';
 
 export class SignUpController implements Controller {
   constructor (
