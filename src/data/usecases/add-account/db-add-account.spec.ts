@@ -1,9 +1,8 @@
+import { type AccountMongoRepository } from 'infra/db/mongodb/account/account-mongo-respoitory';
 import {
   type AccountModel,
   type AddAccountModel,
-  type Hasher,
-  type AddAccountRepository,
-  type LoadAccountByEmailRepository
+  type Hasher
 } from './ad-add-account-protocols';
 import { DbAddAccount } from './db-add-account';
 
@@ -18,27 +17,23 @@ const makeHasher = (): Hasher => {
   return new HasherStub();
 };
 
-const makeAddAccountRepository = (): AddAccountRepository => {
-  class AddAccountRepositoryStub implements AddAccountRepository {
+const makeAccountMongoRepository = (): AccountMongoRepository => {
+  class AccountMongoRepositoryStub implements AccountMongoRepository {
+    async updateAccessToken (id: string, token: string): Promise<void> {}
+
     async add (accountData: AddAccountModel): Promise<AccountModel> {
       return await new Promise((resolve) => {
         resolve(makeFakeAccount());
       });
     }
-  }
-  return new AddAccountRepositoryStub();
-};
 
-const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
-  class LoadAccountByEmailRepositoryStub
-  implements LoadAccountByEmailRepository {
     async loadByEmail (email: string): Promise<AccountModel | null> {
       return await new Promise((resolve) => {
         resolve(null);
       });
     }
   }
-  return new LoadAccountByEmailRepositoryStub();
+  return new AccountMongoRepositoryStub();
 };
 
 const makeFakeAccount = (): AccountModel => ({
@@ -57,24 +52,20 @@ const makeFakeAccountData = (): AddAccountModel => ({
 interface SutTypes {
   sut: DbAddAccount
   hasherStub: Hasher
-  addAccountRepositoryStub: AddAccountRepository
-  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  accountMongoRepositoryStub: AccountMongoRepository
 }
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher();
-  const addAccountRepositoryStub = makeAddAccountRepository();
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+  const accountMongoRepositoryStub = makeAccountMongoRepository();
   const sut = new DbAddAccount(
     hasherStub,
-    addAccountRepositoryStub,
-    loadAccountByEmailRepositoryStub
+    accountMongoRepositoryStub
   );
   return {
     sut,
     hasherStub,
-    addAccountRepositoryStub,
-    loadAccountByEmailRepositoryStub
+    accountMongoRepositoryStub
   };
 };
 
@@ -98,8 +89,8 @@ describe('DBAddAccount Usecase', () => {
   });
 
   test('Shoud call AddAccountRepository with correct values', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
-    const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
+    const { sut, accountMongoRepositoryStub } = makeSut();
+    const addSpy = vi.spyOn(accountMongoRepositoryStub, 'add');
     await sut.add(makeFakeAccountData());
     expect(addSpy).toHaveBeenCalledWith({
       name: 'valid_name',
@@ -109,8 +100,8 @@ describe('DBAddAccount Usecase', () => {
   });
 
   test('Shoud throw if Repository throws', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
-    vi.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(
+    const { sut, accountMongoRepositoryStub } = makeSut();
+    vi.spyOn(accountMongoRepositoryStub, 'add').mockReturnValueOnce(
       new Promise((resolve, reject) => {
         reject(new Error());
       })
@@ -125,19 +116,23 @@ describe('DBAddAccount Usecase', () => {
     expect(account).toEqual(makeFakeAccount());
   });
 
-  test('Shoud return null if LoadAccountByEmailRepository find an exist email', async () => {
-    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+  test('Should return null if LoadAccountByEmailRepository find an exist email', async () => {
+    const { sut, accountMongoRepositoryStub } = makeSut();
     vi.spyOn(
-      loadAccountByEmailRepositoryStub,
+      accountMongoRepositoryStub,
       'loadByEmail'
-    ).mockReturnValueOnce(new Promise((resolve) => { resolve(makeFakeAccount()); }));
+    ).mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolve(makeFakeAccount());
+      })
+    );
     const account = await sut.add(makeFakeAccountData());
     expect(account).toBeNull();
   });
 
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
-    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
-    const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
+    const { sut, accountMongoRepositoryStub } = makeSut();
+    const loadSpy = vi.spyOn(accountMongoRepositoryStub, 'loadByEmail');
     await sut.add(makeFakeAccountData());
     expect(loadSpy).toHaveBeenCalledWith('valid_email@mail.com');
   });
