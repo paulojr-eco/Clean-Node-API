@@ -4,8 +4,8 @@ import {
   serverError,
   successful,
   unauthorized
-} from '../../helpers/http/http-helper';
-import { MissingParamError, ServerError } from '../../errors';
+} from '../../../helpers/http/http-helper';
+import { MissingParamError, ServerError } from '../../../errors';
 import {
   type HttpRequest,
   type Authentication,
