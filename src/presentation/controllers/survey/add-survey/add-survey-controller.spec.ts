@@ -5,7 +5,7 @@ import {
   type AddSurveyModel
 } from './add-survey-controller-protocols';
 import { AddSurveyController } from './add-survey-controller';
-import { badRequest } from '../../../../presentation/helpers/http/http-helper';
+import { badRequest, serverError } from '../../../../presentation/helpers/http/http-helper';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -30,8 +30,7 @@ const makeValidation = (): Validation => {
 
 const makeAddSurvey = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
-    async add (data: AddSurveyModel): Promise<void> {
-    }
+    async add (data: AddSurveyModel): Promise<void> {}
   }
   return new AddSurveyStub();
 };
@@ -75,5 +74,14 @@ describe('AddSurvey Controller', () => {
     const httpRequest = makeFakeRequest();
     await sut.handle(httpRequest);
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  test('Should return 500 if AddSurvey throws', async () => {
+    const { sut, addSurveyStub } = makeSut();
+    vi.spyOn(addSurveyStub, 'add').mockReturnValueOnce(
+      new Promise((resolve, reject) => { reject(new Error()); })
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
