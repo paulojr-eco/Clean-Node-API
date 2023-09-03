@@ -1,7 +1,7 @@
 import {
   badRequest,
-  serverError,
-  successful
+  noContent,
+  serverError
 } from '../../../../presentation/helpers/http/http-helper';
 import {
   type HttpRequest,
@@ -28,9 +28,7 @@ export class AddSurveyController implements Controller {
         question,
         answers
       });
-      return await new Promise((resolve) => {
-        resolve(successful(''));
-      });
+      return noContent();
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
