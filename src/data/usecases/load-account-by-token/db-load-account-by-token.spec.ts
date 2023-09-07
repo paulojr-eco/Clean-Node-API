@@ -41,7 +41,10 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
   const decrypterStub = makeDecrypter();
   const loadAccountByTokenRepositoryStub = makeLoadAccountByTokenRepository();
-  const sut = new DbLoadAccountByToken(decrypterStub, loadAccountByTokenRepositoryStub);
+  const sut = new DbLoadAccountByToken(
+    decrypterStub,
+    loadAccountByTokenRepositoryStub
+  );
   return {
     sut,
     decrypterStub,
@@ -74,5 +77,19 @@ describe('DbLoadAccountByToken Usecase', () => {
     );
     await sut.load('any_token', 'any_role');
     expect(loadByTokenSpy).toHaveBeenCalledWith('any_token', 'any_role');
+  });
+
+  test('Should return null if LoadAccountByTokenRepository returns null', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut();
+    vi.spyOn(
+      loadAccountByTokenRepositoryStub,
+      'loadByToken'
+    ).mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolve(null);
+      })
+    );
+    const account = await sut.load('any_token', 'any_role');
+    expect(account).toBeNull();
   });
 });
