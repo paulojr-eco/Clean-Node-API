@@ -1,5 +1,6 @@
 import {
   forbidden,
+  serverError,
   successful
 } from '../../presentation/helpers/http/http-helper';
 import {
@@ -14,13 +15,21 @@ export class AuthMiddleware implements Middleware {
   constructor (private readonly loadAccountByToken: LoadAccountByToken) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const accessToken = httpRequest.headers?.['x-access-token'];
-    if (accessToken) {
-      const account = await this.loadAccountByToken.load(accessToken);
-      if (account) {
-        return successful({ accountId: account.id });
+    try {
+      const accessToken = httpRequest.headers?.['x-access-token'];
+      if (accessToken) {
+        const account = await this.loadAccountByToken.load(accessToken);
+        if (account) {
+          return successful({ accountId: account.id });
+        }
       }
+      return forbidden(new AccessDeniedError());
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        return serverError(error);
+      }
+      return serverError(new Error('Error while handle auth middleware'));
     }
-    return forbidden(new AccessDeniedError());
   }
 }
