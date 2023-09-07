@@ -1,4 +1,7 @@
-import { forbidden } from '../../presentation/helpers/http/http-helper';
+import {
+  forbidden,
+  successful
+} from '../../presentation/helpers/http/http-helper';
 import {
   type HttpRequest,
   type HttpResponse,
@@ -13,7 +16,10 @@ export class AuthMiddleware implements Middleware {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const accessToken = httpRequest.headers?.['x-access-token'];
     if (accessToken) {
-      await this.loadAccountByToken.load(accessToken);
+      const account = await this.loadAccountByToken.load(accessToken);
+      if (account) {
+        return successful({ accountId: account.id });
+      }
     }
     return forbidden(new AccessDeniedError());
   }
