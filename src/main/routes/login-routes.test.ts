@@ -24,7 +24,7 @@ describe('Login Routes', () => {
     await cleanCollection('accounts');
   });
 
-  describe('/POST signup', () => {
+  describe('POST /signup', () => {
     test.concurrent(
       'Should return 200 on signup',
       async () => {
@@ -43,7 +43,7 @@ describe('Login Routes', () => {
     );
   });
 
-  describe('/POST login', () => {
+  describe('POST /login', () => {
     test('Should return 200 on login', async () => {
       const password = await hash('123', 12);
       await accountCollection.insertOne({
