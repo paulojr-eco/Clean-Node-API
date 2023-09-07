@@ -3,12 +3,19 @@ import { forbidden } from 'presentation/helpers/http/http-helper';
 import { AuthMiddleware } from './auth-middleware';
 import { type LoadAccountByToken } from 'domain/usecases/load-account-by-token';
 import { type AccountModel } from 'domain/models/account';
+import { type HttpRequest } from 'presentation/protocols';
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'hashed_password'
+});
+
+const makeFakeRequest = (): HttpRequest => ({
+  headers: {
+    'x-access-token': 'any_token'
+  }
 });
 
 interface SutTypes {
@@ -49,11 +56,7 @@ describe('Auth Middleware', () => {
   test('Should call LoadAccountByToken with correct accessToken', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
     const loadSpy = vi.spyOn(loadAccountByTokenStub, 'load');
-    await sut.handle({
-      headers: {
-        'x-access-token': 'any_token'
-      }
-    });
+    await sut.handle(makeFakeRequest());
     expect(loadSpy).toHaveBeenCalledWith('any_token');
   });
 });
