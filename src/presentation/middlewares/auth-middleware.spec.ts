@@ -1,5 +1,5 @@
 import { AccessDeniedError } from 'presentation/errors/access-denied-error';
-import { forbidden, successful } from 'presentation/helpers/http/http-helper';
+import { forbidden, serverError, successful } from 'presentation/helpers/http/http-helper';
 import { AuthMiddleware } from './auth-middleware';
 import { type LoadAccountByToken } from 'domain/usecases/load-account-by-token';
 import { type AccountModel } from 'domain/models/account';
@@ -75,5 +75,16 @@ describe('Auth Middleware', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(successful({ accountId: 'valid_id' }));
+  });
+
+  test('Should return 500 if LoadAccountByToken throws', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+    vi.spyOn(loadAccountByTokenStub, 'load').mockReturnValueOnce(
+      new Promise((resolve, reject) => {
+        reject(new Error());
+      })
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
