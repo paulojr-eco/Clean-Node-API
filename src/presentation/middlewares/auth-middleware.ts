@@ -9,7 +9,7 @@ import {
   type Middleware
 } from '../protocols';
 import { AccessDeniedError } from '../../presentation/errors/access-denied-error';
-import { type LoadAccountByToken } from '../../domain/usecases/load-account-by-token';
+import { type LoadAccountByToken } from './auth-middleware-protocols';
 
 export class AuthMiddleware implements Middleware {
   constructor (
