@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/main/server.js",
-    "build": "rimraf dist && tsc",
+    "build": "npx rimraf dist && tsc",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
-    "up": "npm run build && docker-compose up -d",
+    "up": "docker-compose up -d",
     "down": "docker-compose down",
     "test": "vitest --passWithNoTests --silent --no-threads",
     "test:unit": "npm test -- --config vitest-unit.config.ts",
