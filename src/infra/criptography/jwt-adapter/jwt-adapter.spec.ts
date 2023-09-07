@@ -32,4 +32,15 @@ describe('Jwt Adapter', () => {
       expect(encryptCall).toThrowError();
     });
   });
+
+  describe('verify()', () => {
+    test('Should call verify with correct values', () => {
+      const sut = makeSut();
+      vi.spyOn(jwt, 'verify').mockImplementationOnce((): string | null => {
+        return 'any_value';
+      });
+      const decrypt = sut.decrypt('any_token');
+      expect(decrypt).toBe('any_value');
+    });
+  });
 });
