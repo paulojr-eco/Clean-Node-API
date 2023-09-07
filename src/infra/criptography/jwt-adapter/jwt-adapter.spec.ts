@@ -36,11 +36,20 @@ describe('Jwt Adapter', () => {
   describe('verify()', () => {
     test('Should call verify with correct values', () => {
       const sut = makeSut();
+      const verifySpy = vi.spyOn(jwt, 'verify').mockImplementationOnce((): string | null => {
+        return 'any_value';
+      });
+      sut.decrypt('any_token');
+      expect(verifySpy).toHaveBeenCalledWith('any_token', 'secret');
+    });
+
+    test('Should return a value on verify success', () => {
+      const sut = makeSut();
       vi.spyOn(jwt, 'verify').mockImplementationOnce((): string | null => {
         return 'any_value';
       });
-      const decrypt = sut.decrypt('any_token');
-      expect(decrypt).toBe('any_value');
+      const value = sut.decrypt('any_token');
+      expect(value).toBe('any_value');
     });
   });
 });
