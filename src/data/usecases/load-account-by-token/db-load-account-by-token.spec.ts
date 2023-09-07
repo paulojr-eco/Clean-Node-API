@@ -28,7 +28,16 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Shoudl call Decrypter with correct values', async () => {
     const { sut, decrypterStub } = makeSut();
     const decryptSpy = vi.spyOn(decrypterStub, 'decrypt');
-    await sut.load('any_token');
+    await sut.load('any_token', 'any_role');
     expect(decryptSpy).toHaveBeenCalledWith('any_token');
+  });
+
+  test('Shoudl return null if Decrypter returns null', async () => {
+    const { sut, decrypterStub } = makeSut();
+    vi.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(
+      await Promise.resolve(null)
+    );
+    const account = await sut.load('any_token');
+    expect(account).toBeNull();
   });
 });
