@@ -6,6 +6,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'istanbul',
+      reporter: ['lcov'],
       exclude: ['**/main/**']
     }
   },
