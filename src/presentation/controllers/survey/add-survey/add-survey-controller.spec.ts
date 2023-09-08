@@ -90,4 +90,14 @@ describe('AddSurvey Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(noContent());
   });
+
+  test('Should throw a generic error if AddSurveyController throws an error that is not a instance of Error', async () => {
+    const { sut, addSurveyStub } = makeSut();
+    vi.spyOn(addSurveyStub, 'add').mockImplementationOnce(async () => {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return await Promise.reject(null);
+    });
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error('Error while handle add survey')));
+  });
 });
