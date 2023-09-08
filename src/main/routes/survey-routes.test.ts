@@ -25,7 +25,7 @@ describe('Survey Routes', () => {
 
   describe('POST /surveys', () => {
     test.concurrent(
-      'Should return 204 on add survey success',
+      'Should return 403 on add survey without accessToken',
       async () => {
         await new Promise((resolve) => setTimeout(resolve, 5000));
         await request(app)
@@ -39,7 +39,7 @@ describe('Survey Routes', () => {
               answer: 'Answer 2'
             }]
           })
-          .expect(204);
+          .expect(403);
       },
       10000
     );
