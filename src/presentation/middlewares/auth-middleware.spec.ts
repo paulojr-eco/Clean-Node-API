@@ -1,7 +1,15 @@
 import { AccessDeniedError } from 'presentation/errors/access-denied-error';
-import { forbidden, serverError, successful } from 'presentation/helpers/http/http-helper';
+import {
+  forbidden,
+  serverError,
+  successful
+} from 'presentation/helpers/http/http-helper';
 import { AuthMiddleware } from './auth-middleware';
-import { type LoadAccountByToken, type HttpRequest, type AccountModel } from './auth-middleware-protocols';
+import {
+  type LoadAccountByToken,
+  type HttpRequest,
+  type AccountModel
+} from './auth-middleware-protocols';
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
@@ -85,5 +93,17 @@ describe('Auth Middleware', () => {
     );
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test('Should throw a generic error if LoadAccountByTokenStub throws an error that is not a instance of Error', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+    vi.spyOn(loadAccountByTokenStub, 'load').mockImplementationOnce(async () => {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return await Promise.reject(null);
+    });
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(
+      serverError(new Error('Error while handle auth middleware'))
+    );
   });
 });
