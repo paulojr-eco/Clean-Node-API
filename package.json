@@ -13,6 +13,7 @@
     "test:unit": "npm test -- --config vitest-unit.config.ts",
     "test:integration": "npm test -- --config vitest-integration.config.ts",
     "test:ci": "npm test -- run --coverage",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "test:staged": "vitest run --passWithNoTests",
     "prepare": "husky install"
   },
@@ -31,6 +32,7 @@
     "@types/validator": "^13.7.17",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@vitest/coverage-istanbul": "^0.33.0",
+    "coveralls": "^3.1.1",
     "eslint": "^8.45.0",
     "eslint-config-standard-with-typescript": "^37.0.0",
     "eslint-plugin-import": "^2.27.5",
