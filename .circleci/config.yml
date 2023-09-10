@@ -1,0 +1,33 @@
+version: '2.1'
+orbs:
+  node: circleci/node@5.1.0
+jobs:
+  install-dependencies:
+    docker:
+      - image: cimg/base:stable
+      - image: circleci/mongo:5.0-focal
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '20.5'
+      - run: 
+          name: Check Node Version
+          command: node --version
+      - setup_remote_docker
+      - run:
+          name: Waiting for Mongo
+          command: dockerize -wait tcp://localhost:27017 -timeout 5m
+          no_output_timeout: 5m
+      - run:
+          name: install app dependencies
+          command: npm install
+      - run:
+          name: test application
+          command: npm run test:coveralls
+          no_output_timeout: 30m
+
+workflows:
+  test_my_app:
+    jobs:
+      - install-dependencies
