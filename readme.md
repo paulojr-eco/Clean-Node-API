@@ -1,4 +1,7 @@
-# ** Clean Node API **
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/C5V8cHZnhMU5grLNxQmRZa/KSQDeMndzHds368CejJNub/tree/main.svg?style=svg&circle-token=5e67a2999bfc291afe5593c9b9abc0a5d4f4cd1e)](https://dl.circleci.com/status-badge/redirect/circleci/C5V8cHZnhMU5grLNxQmRZa/KSQDeMndzHds368CejJNub/tree/main)
+[![Coverage Status](https://coveralls.io/repos/github/paulojr-eco/Clean-Node-API/badge.svg?branch=main)](https://coveralls.io/github/paulojr-eco/Clean-Node-API?branch=main)
+
+# Clean Node API
 
 Essa API foi construída durante a execução do curso sobre NodeJs, Typescript, TDD, Clean Architecture e SOLID.
 
