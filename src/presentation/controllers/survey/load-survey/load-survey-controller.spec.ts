@@ -22,6 +22,29 @@ const makeFakeSurveys = (): SurveyModel[] => {
   }];
 };
 
+interface SutTypes {
+  sut: LoadSurveysController
+  loadSurveysStub: LoadSurveys
+}
+
+const makeLoadSurveys = (): LoadSurveys => {
+  class LoadSurveysStub implements LoadSurveys {
+    async load (): Promise<SurveyModel[]> {
+      return await new Promise(resolve => { resolve(makeFakeSurveys()); });
+    }
+  }
+  return new LoadSurveysStub();
+};
+
+const makeSut = (): SutTypes => {
+  const loadSurveysStub = makeLoadSurveys();
+  const sut = new LoadSurveysController(loadSurveysStub);
+  return {
+    sut,
+    loadSurveysStub
+  };
+};
+
 describe('LoadSurveys Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date());
@@ -32,14 +55,8 @@ describe('LoadSurveys Controller', () => {
   });
 
   test('Should call LoadSurveys', async () => {
-    class LoadSurveysStub implements LoadSurveys {
-      async load (): Promise<SurveyModel[]> {
-        return await new Promise(resolve => { resolve(makeFakeSurveys()); });
-      }
-    }
-    const loadSurveyStub = new LoadSurveysStub();
-    const loadSpy = vi.spyOn(loadSurveyStub, 'load');
-    const sut = new LoadSurveysController(loadSurveyStub);
+    const { sut, loadSurveysStub } = makeSut();
+    const loadSpy = vi.spyOn(loadSurveysStub, 'load');
     await sut.handle({});
     expect(loadSpy).toHaveBeenCalled();
   });
