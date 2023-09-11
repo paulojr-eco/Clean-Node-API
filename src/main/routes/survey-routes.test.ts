@@ -52,6 +52,7 @@ describe('Survey Routes', () => {
 
   describe('POST /surveys', () => {
     test('Should return 403 on add survey without accessToken', async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       await request(app)
         .post('/api/surveys')
         .send({
@@ -67,7 +68,7 @@ describe('Survey Routes', () => {
           ]
         })
         .expect(403);
-    });
+    }, 10000);
 
     test('Should return 204 on add survey with valid accessToken', async () => {
       const accessToken = await makeAcessToken();

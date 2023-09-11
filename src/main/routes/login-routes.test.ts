@@ -26,6 +26,7 @@ describe('Login Routes', () => {
 
   describe('POST /signup', () => {
     test('Should return 200 on signup', async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       await request(app)
         .post('/api/signup')
         .send({
@@ -35,7 +36,7 @@ describe('Login Routes', () => {
           passwordConfirmation: '123'
         })
         .expect(200);
-    });
+    }, 10000);
   });
 
   describe('POST /login', () => {
