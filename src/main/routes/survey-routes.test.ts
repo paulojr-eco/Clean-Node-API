@@ -90,4 +90,17 @@ describe('Survey Routes', () => {
         .expect(204);
     });
   });
+
+  describe('GET /surveys', () => {
+    test.concurrent(
+      'Should return 403 on load survey without accessToken',
+      async () => {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await request(app)
+          .get('/api/surveys')
+          .expect(403);
+      },
+      10000
+    );
+  });
 });
