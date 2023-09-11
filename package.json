@@ -12,7 +12,7 @@
     "test": "vitest --passWithNoTests --silent --no-threads",
     "test:unit": "npm test -- --config vitest-unit.config.ts",
     "test:integration": "npm test -- --config vitest-integration.config.ts",
-    "test:ci": "npm test -- run --coverage",
+    "test:ci": "npm test -- run --coverage --no-threads",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "test:staged": "vitest run --passWithNoTests --no-threads",
     "prepare": "husky install"
