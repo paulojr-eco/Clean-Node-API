@@ -5,6 +5,24 @@ import { type AddSurveyModel } from 'domain/usecases/add-survey';
 
 let surveyCollection: Collection;
 
+const makeSut = (): SurveyMongoRepository => {
+  return new SurveyMongoRepository();
+};
+
+const makeFakeSurveyData = (): AddSurveyModel => ({
+  question: 'any_question',
+  answers: [
+    {
+      image: 'any_image',
+      answer: 'any_answer'
+    },
+    {
+      answer: 'other_answer'
+    }
+  ],
+  date: new Date()
+});
+
 describe('Survey Mongo Repository', () => {
   const cleanCollection = async (collectionName: string): Promise<void> => {
     surveyCollection = await MongoHelper.getCollection(collectionName);
@@ -24,28 +42,14 @@ describe('Survey Mongo Repository', () => {
     await cleanCollection('surveys');
   });
 
-  const makeFakeSurveyData = (): AddSurveyModel => ({
-    question: 'any_question',
-    answers: [
-      {
-        image: 'any_image',
-        answer: 'any_answer'
-      },
-      {
-        answer: 'other_answer'
-      }
-    ],
-    date: new Date()
-  });
-
-  const makeSut = (): SurveyMongoRepository => {
-    return new SurveyMongoRepository();
-  };
-
-  test('Should add a survey on success', async () => {
-    const sut = makeSut();
-    await sut.add(makeFakeSurveyData());
-    const survey = await surveyCollection.findOne({ question: 'any_question' });
-    expect(survey).toBeTruthy();
+  describe('add()', () => {
+    test('Should add a survey on success', async () => {
+      const sut = makeSut();
+      await sut.add(makeFakeSurveyData());
+      const survey = await surveyCollection.findOne({
+        question: 'any_question'
+      });
+      expect(survey).toBeTruthy();
+    });
   });
 });
