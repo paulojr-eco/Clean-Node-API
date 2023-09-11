@@ -1,6 +1,7 @@
 import { LoadSurveysController } from './load-survey-controller';
 import MockDate from 'mockdate';
 import { type SurveyModel, type LoadSurveys } from './load-survey-controller-protocols';
+import { successful } from 'presentation/helpers/http/http-helper';
 
 const makeFakeSurveys = (): SurveyModel[] => {
   return [{
@@ -59,5 +60,11 @@ describe('LoadSurveys Controller', () => {
     const loadSpy = vi.spyOn(loadSurveysStub, 'load');
     await sut.handle({});
     expect(loadSpy).toHaveBeenCalled();
+  });
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({});
+    expect(httpResponse).toEqual(successful(makeFakeSurveys()));
   });
 });
