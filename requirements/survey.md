@@ -4,7 +4,7 @@
 
 1. ⏳ Recebe uma requisição do tipo **GET** na rota **/api/surveys**
 2. ⏳ Valida se a requisição foi feita por um usuário
-3. ⏳ Retorna 204 caso haja nenhuma enquete 
+3. ✅ Retorna 204 caso haja nenhuma enquete 
 4. ✅ Retorna 200 com os dados da enquete 
 
 > ## Exceções
