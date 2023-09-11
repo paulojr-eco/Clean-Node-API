@@ -1,4 +1,4 @@
-import { serverError, successful } from 'presentation/helpers/http/http-helper';
+import { noContent, serverError, successful } from 'presentation/helpers/http/http-helper';
 import {
   type HttpRequest,
   type HttpResponse,
@@ -12,7 +12,7 @@ export class LoadSurveysController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const surveys = await this.loadSurveys.load();
-      return successful(surveys);
+      return surveys.length ? successful(surveys) : noContent();
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
