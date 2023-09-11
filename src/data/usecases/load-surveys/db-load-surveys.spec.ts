@@ -62,9 +62,21 @@ describe('DbLoadSurveys', () => {
     expect(loadAllSpy).toHaveBeenCalled();
   });
 
-  test('Should returna list of surveys on success', async () => {
+  test('Should return a list of surveys on success', async () => {
     const { sut } = makeSut();
     const surveys = await sut.load();
     expect(surveys).toEqual(makeFakeSurveys());
+  });
+
+  test('Should throw if LoadSurveysRepository throws', async () => {
+    const { sut, loadSurveysRepositoryStub } = makeSut();
+    vi.spyOn(
+      loadSurveysRepositoryStub,
+      'loadAll'
+    ).mockReturnValueOnce(
+      new Promise((resolve, reject) => { reject(new Error()); })
+    );
+    const promise = sut.load();
+    await expect(promise).rejects.toThrow();
   });
 });
