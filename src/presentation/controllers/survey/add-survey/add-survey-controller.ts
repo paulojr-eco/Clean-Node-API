@@ -2,7 +2,7 @@ import {
   badRequest,
   noContent,
   serverError
-} from '../../../../presentation/helpers/http/http-helper';
+} from '@/presentation/helpers/http/http-helper';
 import {
   type HttpRequest,
   type HttpResponse,

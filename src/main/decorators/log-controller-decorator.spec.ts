@@ -2,11 +2,11 @@ import {
   type HttpResponse,
   type Controller,
   type HttpRequest
-} from '../../presentation/protocols';
+} from '@/presentation/protocols';
 import { LogControllerDecorator } from './log-controller-decorator';
-import { serverError, successful } from '../../presentation/helpers/http/http-helper';
-import { type LogErrorRepository } from '../../data/protocols/db/log/log-error-repository';
-import { type AccountModel } from '../../domain/models/account';
+import { serverError, successful } from '@/presentation/helpers/http/http-helper';
+import { type LogErrorRepository } from '@/data/protocols/db/log/log-error-repository';
+import { type AccountModel } from '@/domain/models/account';
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {

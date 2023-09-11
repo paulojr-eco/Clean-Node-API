@@ -3,12 +3,12 @@ import {
   ComprareFieldsValidation,
   EmailValidation,
   ValidationComposite
-} from '../../../../../validation/validators';
+} from '@/validation/validators';
 import { makeSignUpValidation } from './signup-validation-factory';
-import { type Validation } from '../../../../../presentation/protocols/validation';
-import { type EmailValidator } from '../../../../../validation/protocols/email-validator';
+import { type Validation } from '@/presentation/protocols/validation';
+import { type EmailValidator } from '@/validation/protocols/email-validator';
 
-vi.mock('../../../../../validation/validators/validation-composite');
+vi.mock('@/validation/validators/validation-composite');
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {

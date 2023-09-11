@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/main/server.js",
-    "build": "rimraf dist tsconfig.tsbuildinfo && tsc",
+    "build": "rimraf dist tsconfig-build.tsbuildinfo && tsc -p tsconfig-build.json",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "up": "docker-compose up -d",
     "down": "docker-compose down",
@@ -14,7 +14,7 @@
     "test:integration": "npm test -- --config vitest-integration.config.ts",
     "test:ci": "npm test -- run --coverage",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
-    "test:staged": "vitest run --passWithNoTests",
+    "test:staged": "vitest run --passWithNoTests --no-threads",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -54,11 +54,15 @@
     "express": "^4.18.2",
     "husky": "^8.0.3",
     "jsonwebtoken": "^9.0.1",
+    "module-alias": "^2.2.3",
     "mongodb": "^5.7.0",
     "nodemon": "^3.0.1",
     "validator": "^13.9.0"
   },
   "engines": {
     "node": "20.x"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }

@@ -5,4 +5,4 @@ coverage
 data
 !src/data
 .vscode
-tsconfig.tsbuildinfo
+tsconfig-build.tsbuildinfo

@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from 'main/config/app';
-import { MongoHelper } from 'infra/db/mongodb/helpers/mongo-helper';
+import app from '@/main/config/app';
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { type Collection } from 'mongodb';
 import { hash } from 'bcrypt';
 
@@ -25,22 +25,17 @@ describe('Login Routes', () => {
   });
 
   describe('POST /signup', () => {
-    test.concurrent(
-      'Should return 200 on signup',
-      async () => {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        await request(app)
-          .post('/api/signup')
-          .send({
-            name: 'Paulo',
-            email: 'paulo@mail.com',
-            password: '123',
-            passwordConfirmation: '123'
-          })
-          .expect(200);
-      },
-      10000
-    );
+    test('Should return 200 on signup', async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'Paulo',
+          email: 'paulo@mail.com',
+          password: '123',
+          passwordConfirmation: '123'
+        })
+        .expect(200);
+    });
   });
 
   describe('POST /login', () => {

@@ -1,4 +1,4 @@
-import { noContent, serverError, successful } from '../../../../presentation/helpers/http/http-helper';
+import { noContent, serverError, successful } from '@/presentation/helpers/http/http-helper';
 import {
   type HttpRequest,
   type HttpResponse,

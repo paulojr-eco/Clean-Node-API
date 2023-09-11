@@ -1,5 +1,5 @@
 import { type Collection, MongoClient } from 'mongodb';
-import env from '../../../../main/config/env';
+import env from '@/main/config/env';
 
 const isConnected = async (client: MongoClient): Promise<boolean> => {
   let res;

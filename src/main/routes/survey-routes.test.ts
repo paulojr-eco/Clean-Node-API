@@ -1,9 +1,9 @@
 import request from 'supertest';
-import app from 'main/config/app';
-import { MongoHelper } from 'infra/db/mongodb/helpers/mongo-helper';
+import app from '@/main/config/app';
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { type Collection } from 'mongodb';
 import { sign } from 'jsonwebtoken';
-import env from 'main/config/env';
+import env from '@/main/config/env';
 
 let surveyCollection: Collection;
 let accountCollection: Collection;
@@ -51,28 +51,23 @@ describe('Survey Routes', () => {
   });
 
   describe('POST /surveys', () => {
-    test.concurrent(
-      'Should return 403 on add survey without accessToken',
-      async () => {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        await request(app)
-          .post('/api/surveys')
-          .send({
-            question: 'Question',
-            answers: [
-              {
-                answer: 'Answer 1',
-                image: 'http://image-name.com'
-              },
-              {
-                answer: 'Answer 2'
-              }
-            ]
-          })
-          .expect(403);
-      },
-      10000
-    );
+    test('Should return 403 on add survey without accessToken', async () => {
+      await request(app)
+        .post('/api/surveys')
+        .send({
+          question: 'Question',
+          answers: [
+            {
+              answer: 'Answer 1',
+              image: 'http://image-name.com'
+            },
+            {
+              answer: 'Answer 2'
+            }
+          ]
+        })
+        .expect(403);
+    });
 
     test('Should return 204 on add survey with valid accessToken', async () => {
       const accessToken = await makeAcessToken();

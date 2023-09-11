@@ -1,4 +1,4 @@
-import { type Middleware, type HttpRequest } from 'presentation/protocols';
+import { type Middleware, type HttpRequest } from '@/presentation/protocols';
 import { type NextFunction, type Request, type Response } from 'express';
 
 export const adaptMiddleware = (middleware: Middleware) => {

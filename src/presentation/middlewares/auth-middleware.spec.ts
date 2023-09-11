@@ -1,4 +1,4 @@
-import { AccessDeniedError } from 'presentation/errors/access-denied-error';
+import { AccessDeniedError } from '@/presentation/errors/access-denied-error';
 import {
   forbidden,
   serverError,
