@@ -16,10 +16,10 @@ const makeFakeSurveyData = (): AddSurveyModel => ({
   date: new Date()
 });
 
-interface SutTypes {
+type SutTypes = {
   sut: DbAddSurvey
   addSurveyRepositoryStub: AddSurveyRepository
-}
+};
 
 const makeAddSurveyRepository = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {

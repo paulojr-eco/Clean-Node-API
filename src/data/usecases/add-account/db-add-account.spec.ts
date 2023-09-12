@@ -54,12 +54,12 @@ const makeFakeAccountData = (): AddAccountModel => ({
   password: 'valid_password'
 });
 
-interface SutTypes {
+type SutTypes = {
   sut: DbAddAccount
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
-}
+};
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher();
@@ -130,7 +130,11 @@ describe('DBAddAccount Usecase', () => {
     vi.spyOn(
       loadAccountByEmailRepositoryStub,
       'loadByEmail'
-    ).mockReturnValueOnce(new Promise((resolve) => { resolve(makeFakeAccount()); }));
+    ).mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolve(makeFakeAccount());
+      })
+    );
     const account = await sut.add(makeFakeAccountData());
     expect(account).toBeNull();
   });
