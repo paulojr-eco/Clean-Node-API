@@ -1,10 +1,10 @@
 import { type AddAccountRepository } from '@/data/protocols/db/account/add-account-repository';
-import { type AddAccountModel } from '@/domain/usecases/add-account';
+import { type AddAccountModel } from '@/domain/usecases/account/add-account';
 import { type AccountModel } from '@/domain/models/account';
 import {
   type LoadAccountByEmailRepository,
   type UpdateAccessTokenRepository
-} from '@/data/usecases/authenticantion/db-authentication-protocols';
+} from '@/data/usecases/account/authenticantion/db-authentication-protocols';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { ObjectId } from 'mongodb';
 import { type LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository';

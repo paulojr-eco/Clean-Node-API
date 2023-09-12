@@ -1,7 +1,7 @@
 import { ObjectId, type Collection } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { AccountMongoRepository } from './account-mongo-respoitory';
-import { type AddAccountModel } from '@/domain/usecases/add-account';
+import { type AddAccountModel } from '@/domain/usecases/account/add-account';
 
 let accountCollection: Collection;
 

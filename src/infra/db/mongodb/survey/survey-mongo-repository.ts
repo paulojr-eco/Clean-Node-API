@@ -2,9 +2,9 @@ import { type SurveyModel } from '@/domain/models/survey';
 import {
   type AddSurveyModel,
   type AddSurveyRepository
-} from '@/data/usecases/add-survey/db-add-survey-protocols';
+} from '@/data/usecases/survey/add-survey/db-add-survey-protocols';
 import { MongoHelper } from '../helpers/mongo-helper';
-import { type LoadSurveysRepository } from '@/data/usecases/load-surveys/db-load-surveys-protocols';
+import { type LoadSurveysRepository } from '@/data/usecases/survey/load-surveys/db-load-surveys-protocols';
 import { type LoadSurveyByIdRepository } from '@/data/usecases/load-survey-by-id/db-load-survey-by-id-protocols';
 import { ObjectId } from 'mongodb';
 
