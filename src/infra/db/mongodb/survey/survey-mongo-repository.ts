@@ -20,14 +20,8 @@ implements
 
   async loadAll (): Promise<SurveyModel[]> {
     const surveyCollection = await MongoHelper.getCollection('surveys');
-    const result = await surveyCollection.find().toArray();
-    const surveys: SurveyModel[] = result.map((survey: any) => ({
-      id: survey._id.toString(),
-      question: survey.question,
-      answers: survey.answers,
-      date: new Date(survey.date)
-    }));
-    return surveys;
+    const surveys = await surveyCollection.find().toArray();
+    return MongoHelper.mapCollection(surveys);
   }
 
   async loadById (id: string): Promise<SurveyModel | null> {
