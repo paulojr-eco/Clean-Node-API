@@ -1,7 +1,7 @@
-import { type LoadSurveysRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository';
 import { type SurveyModel } from 'domain/models/survey';
 import { DbLoadSurveys } from './db-load-surveys';
 import MockDate from 'mockdate';
+import { type LoadSurveysRepository } from '@/data/protocols/db/survey/load-surveys-repository';
 
 const makeFakeSurveys = (): SurveyModel[] => {
   return [
@@ -55,7 +55,7 @@ const makeSut = (): SutTypes => {
   };
 };
 
-describe('DbLoadSurveys', () => {
+describe.concurrent('ys', () => {
   beforeAll(() => {
     MockDate.set(new Date());
   });
