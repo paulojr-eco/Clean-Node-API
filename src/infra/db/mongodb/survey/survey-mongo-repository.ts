@@ -5,7 +5,7 @@ import {
 } from '@/data/usecases/survey/add-survey/db-add-survey-protocols';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { type LoadSurveysRepository } from '@/data/usecases/survey/load-surveys/db-load-surveys-protocols';
-import { type LoadSurveyByIdRepository } from '@/data/usecases/load-survey-by-id/db-load-survey-by-id-protocols';
+import { type LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository';
 import { ObjectId } from 'mongodb';
 
 export class SurveyMongoRepository
