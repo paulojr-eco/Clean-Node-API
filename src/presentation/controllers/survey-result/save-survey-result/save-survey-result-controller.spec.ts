@@ -1,4 +1,6 @@
+import { forbidden } from '@/presentation/helpers/http/http-helper';
 import { SaveSurveyResultController } from './save-survey-result-controller';
+import { InvalidParamError } from '@/presentation/errors';
 import {
   type HttpRequest,
   type SurveyModel,
@@ -54,5 +56,16 @@ describe('SaveSurveyResult Controller', () => {
     const loadByIdSpy = vi.spyOn(loadSurveyByIdStub, 'loadById');
     await sut.handle(makeFakeRequest());
     expect(loadByIdSpy).toHaveBeenCalledWith('any_survey_id');
+  });
+
+  test('Should return 403 if LoadSurveyById returns null', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    vi.spyOn(loadSurveyByIdStub, 'loadById').mockResolvedValueOnce(
+      await new Promise((resolve) => {
+        resolve(null);
+      })
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 });
