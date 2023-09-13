@@ -124,7 +124,7 @@ describe('SaveSurveyResult Controller', () => {
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 
-  test('Should throw a generic error if LoadSurveyById throws an error that is not a instance of Error', async () => {
+  test('Should throw a generic error if some dependency throws an error that is not a instance of Error', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     vi.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(
       async () => {
@@ -161,5 +161,16 @@ describe('SaveSurveyResult Controller', () => {
       date: new Date(),
       answer: 'any_answer'
     });
+  });
+
+  test('Should return 500 if SaveSurveyResult throws', async () => {
+    const { sut, saveSurveyResultStub } = makeSut();
+    vi.spyOn(saveSurveyResultStub, 'save').mockReturnValueOnce(
+      new Promise((resolve, reject) => {
+        reject(new Error());
+      })
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
