@@ -1,4 +1,7 @@
-import { forbidden, serverError } from '@/presentation/helpers/http/http-helper';
+import {
+  forbidden,
+  serverError
+} from '@/presentation/helpers/http/http-helper';
 import { SaveSurveyResultController } from './save-survey-result-controller';
 import { InvalidParamError } from '@/presentation/errors';
 import {
@@ -78,5 +81,19 @@ describe('SaveSurveyResult Controller', () => {
     );
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test('Should throw a generic error if LoadSurveyById throws an error that is not a instance of Error', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    vi.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(
+      async () => {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return await Promise.reject(null);
+      }
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(
+      serverError(new Error('Error while handle save survey result'))
+    );
   });
 });
