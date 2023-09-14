@@ -108,5 +108,12 @@ describe('Survey Mongo Repository', () => {
       const survey = await sut.loadById(res.insertedId.toString());
       expect(survey).toBeTruthy();
     });
+
+    test('Should return null if survey id does not exists ', async () => {
+      const invalidId = '000000000000000000000000';
+      const sut = makeSut();
+      const survey = await sut.loadById(invalidId);
+      expect(survey).toBeNull();
+    });
   });
 });
