@@ -152,6 +152,20 @@ describe('SaveSurveyResult Controller', () => {
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('answer')));
   });
 
+  test('Should return 403 if the accountId in invalid', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({
+      params: {
+        surveyId: 'any_survey_id'
+      },
+      body: {
+        answer: 'any_answer'
+      },
+      accountId: undefined
+    });
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('accountId')));
+  });
+
   test('Should call SaveSurveyResult with correct values', async () => {
     const { sut, saveSurveyResultStub } = makeSut();
     const saveIdSpy = vi.spyOn(saveSurveyResultStub, 'save');
