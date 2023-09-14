@@ -13,7 +13,7 @@ O foco desse projeto foi a criação de uma interface com sua arquitetura desaco
 2. [Login](./requirements/login.md)
 3. [Adicionar Enquete](./requirements/add-survey.md)
 4. [Listar Enquetes](./requirements/survey.md)
-5. [Responder Enquete (em construção...)](./requirements/add-survey-result.md)
+5. [Responder Enquete](./requirements/add-survey-result.md)
 
 > ## Princípios Aplicados:
 * Single Responsability Principle (SRP)
