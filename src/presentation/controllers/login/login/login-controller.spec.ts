@@ -10,7 +10,7 @@ import {
   type HttpRequest,
   type Authentication,
   type Validation,
-  type AuthenticationModel
+  type AuthenticationParams
 } from './login-controller-protocols';
 
 const makeValidation = (): Validation => {
@@ -24,7 +24,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
+    async auth (authentication: AuthenticationParams): Promise<string> {
       return await new Promise((resolve) => {
         resolve('any_token');
       });
