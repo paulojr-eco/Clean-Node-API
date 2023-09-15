@@ -1,39 +1,18 @@
+import { mockAddSurveyRepository } from '@/data/test';
 import { DbAddSurvey } from './db-add-survey';
 import {
-  type AddSurveyRepository,
-  type AuthenticationParams
+  type AddSurveyRepository
 } from './db-add-survey-protocols';
 import MockDate from 'mockdate';
-
-const makeFakeSurveyData = (): AuthenticationParams => ({
-  question: 'any_question',
-  answers: [
-    {
-      image: 'any_image',
-      answer: 'any_answer'
-    }
-  ],
-  date: new Date()
-});
+import { mockAddSurveyParams } from '@/domain/test/mock-survey';
 
 type SutTypes = {
   sut: DbAddSurvey
   addSurveyRepositoryStub: AddSurveyRepository
 };
 
-const makeAddSurveyRepository = (): AddSurveyRepository => {
-  class AddSurveyRepositoryStub implements AddSurveyRepository {
-    async add (surveyData: AuthenticationParams): Promise<void> {
-      await new Promise<void>((resolve) => {
-        resolve();
-      });
-    }
-  }
-  return new AddSurveyRepositoryStub();
-};
-
 const makeSut = (): SutTypes => {
-  const addSurveyRepositoryStub = makeAddSurveyRepository();
+  const addSurveyRepositoryStub = mockAddSurveyRepository();
   const sut = new DbAddSurvey(addSurveyRepositoryStub);
   return {
     sut,
@@ -53,7 +32,7 @@ describe('DbAddSurvey UseCase', () => {
   test('Should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut();
     const addSpy = vi.spyOn(addSurveyRepositoryStub, 'add');
-    const surveyData = makeFakeSurveyData();
+    const surveyData = mockAddSurveyParams();
     await sut.add(surveyData);
     expect(addSpy).toHaveBeenCalledWith(surveyData);
   });
@@ -63,7 +42,7 @@ describe('DbAddSurvey UseCase', () => {
     vi.spyOn(addSurveyRepositoryStub, 'add').mockReturnValueOnce(
       new Promise((resolve, reject) => { reject(new Error()); })
     );
-    const promise = sut.add(makeFakeSurveyData());
+    const promise = sut.add(mockAddSurveyParams());
     await expect(promise).rejects.toThrow();
   });
 });
