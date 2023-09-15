@@ -7,7 +7,7 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul',
       reporter: ['lcov'],
-      exclude: ['**/main/**']
+      exclude: ['**/main/**', '**/test/**']
     }
   },
   plugins: [tsconfigPaths()]

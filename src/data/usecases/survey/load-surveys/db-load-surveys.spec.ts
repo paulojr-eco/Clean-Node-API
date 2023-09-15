@@ -1,44 +1,8 @@
 import { DbLoadSurveys } from './db-load-surveys';
 import MockDate from 'mockdate';
-import { type LoadSurveysRepository, type SurveyModel } from './db-load-surveys-protocols';
-
-const makeFakeSurveys = (): SurveyModel[] => {
-  return [
-    {
-      id: 'any_id',
-      question: 'any_question',
-      answers: [
-        {
-          image: 'any_image',
-          answer: 'any_answer'
-        }
-      ],
-      date: new Date()
-    },
-    {
-      id: 'other_id',
-      question: 'other_question',
-      answers: [
-        {
-          image: 'other_image',
-          answer: 'other_answer'
-        }
-      ],
-      date: new Date()
-    }
-  ];
-};
-
-const makeLoadSurveysRepository = (): LoadSurveysRepository => {
-  class LoadSurveysRepositoryStub implements LoadSurveysRepository {
-    async loadAll (): Promise<SurveyModel[]> {
-      return await new Promise((resolve) => {
-        resolve(makeFakeSurveys());
-      });
-    }
-  }
-  return new LoadSurveysRepositoryStub();
-};
+import { type LoadSurveysRepository } from './db-load-surveys-protocols';
+import { mockLoadSurveysRepository } from '@/data/test';
+import { mockSurveysModel } from '@/domain/test/mock-survey';
 
 type SutTypes = {
   sut: DbLoadSurveys
@@ -46,7 +10,7 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const loadSurveysRepositoryStub = makeLoadSurveysRepository();
+  const loadSurveysRepositoryStub = mockLoadSurveysRepository();
   const sut = new DbLoadSurveys(loadSurveysRepositoryStub);
   return {
     sut,
@@ -73,7 +37,7 @@ describe.concurrent('ys', () => {
   test('Should return a list of surveys on success', async () => {
     const { sut } = makeSut();
     const surveys = await sut.load();
-    expect(surveys).toEqual(makeFakeSurveys());
+    expect(surveys).toEqual(mockSurveysModel());
   });
 
   test('Should throw if LoadSurveysRepository throws', async () => {
@@ -82,7 +46,7 @@ describe.concurrent('ys', () => {
       loadSurveysRepositoryStub,
       'loadAll'
     ).mockReturnValueOnce(
-      new Promise((resolve, reject) => { reject(new Error()); })
+      Promise.reject(new Error())
     );
     const promise = sut.load();
     await expect(promise).rejects.toThrow();

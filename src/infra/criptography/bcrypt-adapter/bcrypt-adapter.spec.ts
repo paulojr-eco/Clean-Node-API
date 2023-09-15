@@ -18,9 +18,7 @@ describe('Bcrypt Adapter', () => {
     test('Should return a valid hash on hash success', async () => {
       const sut = makeSut();
       vi.spyOn(bcrypt, 'hash').mockImplementationOnce(async () => {
-        return await new Promise((resolve) => {
-          resolve('hash');
-        });
+        return await Promise.resolve('hash');
       });
       const hash = await sut.hash('any_value');
       expect(hash).toBe('hash');
@@ -46,9 +44,7 @@ describe('Bcrypt Adapter', () => {
     test('Should return true when compare succeeds', async () => {
       const sut = makeSut();
       vi.spyOn(bcrypt, 'compare').mockImplementationOnce(async () => {
-        return await new Promise((resolve) => {
-          resolve(true);
-        });
+        return await Promise.resolve(true);
       });
       const isValid = await sut.compare('any_value', 'any_hash');
       expect(isValid).toBe(true);
