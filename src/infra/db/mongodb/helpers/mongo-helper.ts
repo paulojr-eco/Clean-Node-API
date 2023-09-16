@@ -34,7 +34,6 @@ export const MongoHelper = {
   },
   map (data: any): any {
     const { _id, ...collectionWithoutId } = data;
-    console.log('Id que veio: ', _id);
     return { id: _id.toString(), ...collectionWithoutId };
   },
   mapCollection (collection: any[]): any[] {
