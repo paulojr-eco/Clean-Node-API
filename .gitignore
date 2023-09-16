@@ -6,3 +6,4 @@ data
 !src/data
 .vscode
 tsconfig-build.tsbuildinfo
+tsconfig.tsbuildinfo
