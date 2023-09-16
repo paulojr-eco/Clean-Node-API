@@ -4,6 +4,7 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { type Collection } from 'mongodb';
 import { sign } from 'jsonwebtoken';
 import env from '@/main/config/env';
+import { waitForAppStart } from '../test/app-helper';
 
 let surveyCollection: Collection;
 let accountCollection: Collection;
@@ -39,6 +40,8 @@ describe('Survey Routes', () => {
   };
   beforeAll(async () => {
     await MongoHelper.connect();
+
+    await waitForAppStart();
   });
 
   afterAll(async () => {
@@ -48,11 +51,12 @@ describe('Survey Routes', () => {
 
   beforeEach(async () => {
     await resetCollections();
+
+    await waitForAppStart();
   });
 
   describe('POST /surveys', () => {
     test('Should return 403 on add survey without accessToken', async () => {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
       await request(app)
         .post('/api/surveys')
         .send({
@@ -68,7 +72,7 @@ describe('Survey Routes', () => {
           ]
         })
         .expect(403);
-    }, 10000);
+    });
 
     test('Should return 204 on add survey with valid accessToken', async () => {
       const accessToken = await makeAccessToken();

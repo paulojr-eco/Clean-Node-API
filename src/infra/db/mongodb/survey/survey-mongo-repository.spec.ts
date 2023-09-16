@@ -17,6 +17,8 @@ describe('Survey Mongo Repository', () => {
 
   beforeAll(async () => {
     await MongoHelper.connect();
+
+    await cleanCollection('surveys');
   });
 
   afterAll(async () => {

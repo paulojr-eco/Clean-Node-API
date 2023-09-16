@@ -3,6 +3,7 @@ import app from '@/main/config/app';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { type Collection } from 'mongodb';
 import { hash } from 'bcrypt';
+import { waitForAppStart } from '../test/app-helper';
 
 let accountCollection: Collection;
 
@@ -13,6 +14,9 @@ describe('Login Routes', () => {
   };
   beforeAll(async () => {
     await MongoHelper.connect();
+
+    await waitForAppStart();
+    await cleanCollection('accounts');
   });
 
   afterAll(async () => {
@@ -26,7 +30,6 @@ describe('Login Routes', () => {
 
   describe('POST /signup', () => {
     test('Should return 200 on signup', async () => {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
       await request(app)
         .post('/api/signup')
         .send({
@@ -36,7 +39,7 @@ describe('Login Routes', () => {
           passwordConfirmation: '123'
         })
         .expect(200);
-    }, 10000);
+    });
   });
 
   describe('POST /login', () => {

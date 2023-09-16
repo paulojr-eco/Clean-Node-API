@@ -1,6 +1,6 @@
 import { ObjectId, type Collection } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
-import { AccountMongoRepository } from './account-mongo-respoitory';
+import { AccountMongoRepository } from './account-mongo-repository';
 import { mockAddAccountParams } from '@/domain/test';
 
 let accountCollection: Collection;

@@ -25,8 +25,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
       }
     ],
     date: new Date()
-  }
-  );
+  });
   const survey = await surveyCollection.findOne({ _id: res.insertedId });
   return MongoHelper.map(survey);
 };
@@ -53,6 +52,8 @@ describe('Survey Mongo Repository', () => {
 
   beforeAll(async () => {
     await MongoHelper.connect();
+
+    await cleanCollections();
   });
 
   afterAll(async () => {
