@@ -1,13 +1,17 @@
 import { loginPath } from './paths/login-path';
-import { accountSchema } from './schemas/account-schema';
-import { loginParamsSchema } from './schemas/login-params-schema';
+import { badRequest, serverError, unauthorized } from './components';
+import { accountSchema, errorSchema, loginParamsSchema } from './schemas';
 
 export default {
   openapi: '3.0.0',
   info: {
     title: 'Clean Node API',
     description: 'API com objetivo de construir enquetes sobre temas diversos',
-    version: '2.2.0'
+    version: '2.2.0',
+    license: {
+      name: 'MIT License',
+      url: 'https://github.com/paulojr-eco/Clean-Node-API/blob/main/LICENSE'
+    }
   },
   servers: [
     {
@@ -25,6 +29,12 @@ export default {
   },
   schemas: {
     account: accountSchema,
-    loginParams: loginParamsSchema
+    loginParams: loginParamsSchema,
+    error: errorSchema
+  },
+  components: {
+    badRequest,
+    serverError,
+    unauthorized
   }
 };
