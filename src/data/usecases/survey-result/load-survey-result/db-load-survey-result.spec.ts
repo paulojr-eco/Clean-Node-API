@@ -3,15 +3,32 @@ import { type SurveyResultModel } from '../save-survey-result/db-save-survey-res
 import { DbLoadSurveyResult } from './db-load-survey-result';
 import { type LoadSurveyResultRepository } from '@/data/protocols/db/survey-result/load-survey-result-repository';
 
+const mockLoadSurveyResultRepository = (): LoadSurveyResultRepository => {
+  class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
+    async loadBySurveyId (surveyId: string): Promise<SurveyResultModel> {
+      return await Promise.resolve(mockSurveyResultModel());
+    }
+  }
+  return new LoadSurveyResultRepositoryStub();
+};
+
+type SutTypes = {
+  sut: DbLoadSurveyResult
+  loadSurveyResultRepositoryStub: LoadSurveyResultRepository
+};
+
+const makeSut = (): SutTypes => {
+  const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository();
+  const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub);
+  return {
+    sut,
+    loadSurveyResultRepositoryStub
+  };
+};
+
 describe('DbLoadSurveyResult UseCase', () => {
   test('Should call LoadSurveyResultRepository with correct value', async () => {
-    class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
-      async loadBySurveyId (surveyId: string): Promise<SurveyResultModel> {
-        return await Promise.resolve(mockSurveyResultModel());
-      }
-    }
-    const loadSurveyResultRepositoryStub = new LoadSurveyResultRepositoryStub();
-    const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub);
+    const { sut, loadSurveyResultRepositoryStub } = makeSut();
     const loadBySurveyIdSpy = vi.spyOn(
       loadSurveyResultRepositoryStub,
       'loadBySurveyId'
