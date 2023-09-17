@@ -1,7 +1,8 @@
-import { mockSaveSurveyResultRepository } from '@/data/test';
+import { mockLoadSurveyResultRepository, mockSaveSurveyResultRepository } from '@/data/test';
 import { DbSaveSurveyResult } from './db-save-survey-result';
 import {
-  type SaveSurveyResultRepository
+  type SaveSurveyResultRepository,
+  type LoadSurveyResultRepository
 } from './db-save-survey-result-protocols';
 import MockDate from 'mockdate';
 import { mockSaveSurveyResultParams, mockSurveyResultModel } from '@/domain/test/mock-survey-result';
@@ -9,14 +10,17 @@ import { mockSaveSurveyResultParams, mockSurveyResultModel } from '@/domain/test
 type SutTypes = {
   sut: DbSaveSurveyResult
   saveSurveyResultRepositoryStub: SaveSurveyResultRepository
+  loadSurveyResultRepositoryStub: LoadSurveyResultRepository
 };
 
 const makeSut = (): SutTypes => {
   const saveSurveyResultRepositoryStub = mockSaveSurveyResultRepository();
-  const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub);
+  const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository();
+  const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub, loadSurveyResultRepositoryStub);
   return {
     sut,
-    saveSurveyResultRepositoryStub
+    saveSurveyResultRepositoryStub,
+    loadSurveyResultRepositoryStub
   };
 };
 
@@ -37,11 +41,31 @@ describe('DbSaveSurveyResult UseCase', () => {
     expect(saveSpy).toHaveBeenCalledWith(surveyResultData);
   });
 
+  test('Should call LoadSurveyResultRepository with correct values', async () => {
+    const { sut, loadSurveyResultRepositoryStub } = makeSut();
+    const loadBySurveyIdSpy = vi.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId');
+    const surveyResultData = mockSaveSurveyResultParams();
+    await sut.save(surveyResultData);
+    expect(loadBySurveyIdSpy).toHaveBeenCalledWith(surveyResultData.surveyId);
+  });
+
   test('Should throw if SaveSurveyResultRepository throws', async () => {
     const { sut, saveSurveyResultRepositoryStub } = makeSut();
     vi.spyOn(
       saveSurveyResultRepositoryStub,
       'save'
+    ).mockReturnValueOnce(
+      Promise.reject(new Error())
+    );
+    const promise = sut.save(mockSaveSurveyResultParams());
+    await expect(promise).rejects.toThrow();
+  });
+
+  test('Should throw if LoadSurveyResultRepository throws', async () => {
+    const { sut, loadSurveyResultRepositoryStub } = makeSut();
+    vi.spyOn(
+      loadSurveyResultRepositoryStub,
+      'loadBySurveyId'
     ).mockReturnValueOnce(
       Promise.reject(new Error())
     );

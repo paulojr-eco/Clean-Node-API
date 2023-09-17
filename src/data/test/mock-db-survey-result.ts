@@ -5,8 +5,8 @@ import { type LoadSurveyResultRepository } from '../protocols/db/survey-result/l
 
 export const mockSaveSurveyResultRepository = (): SaveSurveyResultRepository => {
   class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
-    async save (data: SaveSurveyResultParams): Promise<SurveyResultModel> {
-      return await Promise.resolve(mockSurveyResultModel());
+    async save (data: SaveSurveyResultParams): Promise<void> {
+      await Promise.resolve();
     }
   }
   return new SaveSurveyResultRepositoryStub();
