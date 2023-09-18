@@ -1,4 +1,4 @@
-import { forbidden } from '@/presentation/helpers/http/http-helper';
+import { forbidden, serverError } from '@/presentation/helpers/http/http-helper';
 import { LoadSurveyResultController } from './load-survey-result-controller';
 import {
   type LoadSurveyById,
@@ -6,6 +6,7 @@ import {
 } from './load-survey-result-controller-protocols';
 import { mockLoadSurveyById } from '@/data/test';
 import { InvalidParamError } from '@/presentation/errors';
+import { throwError } from '@/domain/test';
 
 type SutTypes = {
   sut: LoadSurveyResultController
@@ -42,5 +43,26 @@ describe('LoadSurveyResult Controller', () => {
     );
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
+  });
+
+  test('Should return 500 if LoadSurveyByUd throws', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    vi.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(throwError);
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test('Should throw a generic error if some dependency throws an error that is not a instance of Error', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    vi.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(
+      async () => {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return await Promise.reject(null);
+      }
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(
+      serverError(new Error('Error while handle load survey result'))
+    );
   });
 });
