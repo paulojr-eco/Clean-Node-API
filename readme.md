@@ -7,6 +7,9 @@ Essa API foi construída durante a execução do curso sobre NodeJs, Typescript,
 
 O foco desse projeto foi a criação de uma interface com sua arquitetura desacoplada e bem definida, utilizando a metodologia TDD (Test Driven Development) como guia de trabalho, Clean Architecture para realizar a distribuição das responsabilidades entre as camadas que compõem a API. Além disso, em todo momento foram seguidos os princípios do SOLID, aplicando os devidos Design Patterns para resolver alguns problemas comumente enfrentados no meio dev.
 
+> ## Documentação das rotas:
+<a href="https://clean-node-api-abyv.onrender.com/api-docs/" target="_blank">Visite a página da documentação feita com Swagger</a>
+
 > ## APIs concluídas durante a execução do curso:
 
 1. [Cadastro](./requirements/signup.md)
