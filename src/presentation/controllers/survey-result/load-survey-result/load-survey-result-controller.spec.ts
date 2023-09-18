@@ -7,18 +7,23 @@ import {
 import { mockLoadSurveyById } from '@/data/test';
 import { InvalidParamError } from '@/presentation/errors';
 import { throwError } from '@/domain/test';
+import { mockLoadSurveyResult } from '@/presentation/test';
+import { type LoadSurveyResult } from '@/domain/usecases/survey-result/load-survey-result';
 
 type SutTypes = {
   sut: LoadSurveyResultController
   loadSurveyByIdStub: LoadSurveyById
+  loadSurveyResultStub: LoadSurveyResult
 };
 
 const makeSut = (): SutTypes => {
   const loadSurveyByIdStub = mockLoadSurveyById();
-  const sut = new LoadSurveyResultController(loadSurveyByIdStub);
+  const loadSurveyResultStub = mockLoadSurveyResult();
+  const sut = new LoadSurveyResultController(loadSurveyByIdStub, loadSurveyResultStub);
   return {
     sut,
-    loadSurveyByIdStub
+    loadSurveyByIdStub,
+    loadSurveyResultStub
   };
 };
 
@@ -45,7 +50,7 @@ describe('LoadSurveyResult Controller', () => {
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 
-  test('Should return 500 if LoadSurveyByUd throws', async () => {
+  test('Should return 500 if LoadSurveyById throws', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     vi.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(throwError);
     const httpResponse = await sut.handle(makeFakeRequest());
@@ -64,5 +69,19 @@ describe('LoadSurveyResult Controller', () => {
     expect(httpResponse).toEqual(
       serverError(new Error('Error while handle load survey result'))
     );
+  });
+
+  test('Should call LoadSurveyResult with correct value', async () => {
+    const { sut, loadSurveyResultStub } = makeSut();
+    const loadSpy = vi.spyOn(loadSurveyResultStub, 'load');
+    await sut.handle(makeFakeRequest());
+    expect(loadSpy).toHaveBeenCalledWith('any_id');
+  });
+
+  test('Should return 500 if LoadSurveyResult throws', async () => {
+    const { sut, loadSurveyResultStub } = makeSut();
+    vi.spyOn(loadSurveyResultStub, 'load').mockImplementationOnce(throwError);
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
