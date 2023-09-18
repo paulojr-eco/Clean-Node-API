@@ -1,6 +1,11 @@
+import { forbidden } from '@/presentation/helpers/http/http-helper';
 import { LoadSurveyResultController } from './load-survey-result-controller';
-import { type LoadSurveyById, type HttpRequest } from './load-survey-result-controller-protocols';
+import {
+  type LoadSurveyById,
+  type HttpRequest
+} from './load-survey-result-controller-protocols';
 import { mockLoadSurveyById } from '@/data/test';
+import { InvalidParamError } from '@/presentation/errors';
 
 type SutTypes = {
   sut: LoadSurveyResultController
@@ -28,5 +33,14 @@ describe('LoadSurveyResult Controller', () => {
     const loadByIdSpy = vi.spyOn(loadSurveyByIdStub, 'loadById');
     await sut.handle(makeFakeRequest());
     expect(loadByIdSpy).toHaveBeenCalledWith('any_id');
+  });
+
+  test('Should return 403 if LoadSurveyByUd returns null', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    vi.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(
+      Promise.resolve(null)
+    );
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 });
