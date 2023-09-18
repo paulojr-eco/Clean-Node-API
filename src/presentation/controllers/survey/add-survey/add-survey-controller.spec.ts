@@ -8,7 +8,7 @@ import { badRequest, noContent, serverError } from '@/presentation/helpers/http/
 import MockDate from 'mockdate';
 import { mockAddSurvey, mockValidation } from '@/presentation/test';
 
-const makeFakeRequest = (): HttpRequest => ({
+const mockRequest = (): HttpRequest => ({
   body: {
     question: 'any_question',
     answers: [
@@ -50,7 +50,7 @@ describe('AddSurvey Controller', () => {
   test('Should call validation with correct values', async () => {
     const { sut, validationStub } = makeSut();
     const validateSpy = vi.spyOn(validationStub, 'validate');
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
     await sut.handle(httpRequest);
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
   });
@@ -58,14 +58,14 @@ describe('AddSurvey Controller', () => {
   test('Should return 400 if Validation fails', async () => {
     const { sut, validationStub } = makeSut();
     vi.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error());
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(badRequest(new Error()));
   });
 
   test('Should call AddSurvey with correct values', async () => {
     const { sut, addSurveyStub } = makeSut();
     const addSpy = vi.spyOn(addSurveyStub, 'add');
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
     await sut.handle(httpRequest);
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
   });
@@ -75,13 +75,13 @@ describe('AddSurvey Controller', () => {
     vi.spyOn(addSurveyStub, 'add').mockReturnValueOnce(
       Promise.reject(new Error())
     );
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   test('Should return 204 on success', async () => {
     const { sut } = makeSut();
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(noContent());
   });
 
@@ -91,7 +91,7 @@ describe('AddSurvey Controller', () => {
       // eslint-disable-next-line prefer-promise-reject-errors
       return await Promise.reject(null);
     });
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new Error('Error while handle add survey')));
   });
 });

@@ -19,7 +19,7 @@ import { throwError } from '@/domain/test';
 import { mockAddAccount } from '@/data/test';
 import { mockValidation, mockAuthentication } from '@/presentation/test';
 
-const makeFakeRequest = (): HttpRequest => ({
+const mockRequest = (): HttpRequest => ({
   body: {
     name: 'any_name',
     email: 'any_email@mail.com',
@@ -58,7 +58,7 @@ describe('SignUp Controller', () => {
     vi.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
       return await Promise.reject(new Error());
     });
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse.body).toEqual(new ServerError());
   });
@@ -69,7 +69,7 @@ describe('SignUp Controller', () => {
       // eslint-disable-next-line prefer-promise-reject-errors
       return await Promise.reject(null);
     });
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse.statusCode).toEqual(500);
     expect(httpResponse.body).toEqual(
       new ServerError('Error while handle signup')
@@ -79,7 +79,7 @@ describe('SignUp Controller', () => {
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut();
     const addSpy = vi.spyOn(addAccountStub, 'add');
-    await sut.handle(makeFakeRequest());
+    await sut.handle(mockRequest());
     expect(addSpy).toHaveBeenCalledWith({
       name: 'any_name',
       email: 'any_email@mail.com',
@@ -89,7 +89,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 200 if valid data is provided', async () => {
     const { sut } = makeSut();
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse.statusCode).toBe(200);
     expect(httpResponse.body).toEqual({
       accessToken: 'any_token'
@@ -99,14 +99,14 @@ describe('SignUp Controller', () => {
   test('Should return 403 if AddAccount returns null', async () => {
     const { sut, addAccountStub } = makeSut();
     vi.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null));
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
   });
 
   test('Should call Vialidation with correct value', async () => {
     const { sut, validationStub } = makeSut();
     const validateSpy = vi.spyOn(validationStub, 'validate');
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
     await sut.handle(httpRequest);
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
   });
@@ -116,7 +116,7 @@ describe('SignUp Controller', () => {
     vi.spyOn(validationStub, 'validate').mockReturnValueOnce(
       new MissingParamError('any_field')
     );
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('any_field'))
     );
@@ -125,7 +125,7 @@ describe('SignUp Controller', () => {
   test('Should call Authentication with correct values', async () => {
     const { sut, authenticationStub } = makeSut();
     const authSpy = vi.spyOn(authenticationStub, 'auth');
-    await sut.handle(makeFakeRequest());
+    await sut.handle(mockRequest());
     expect(authSpy).toHaveBeenCalledWith({
       email: 'any_email@mail.com',
       password: 'any_password'
@@ -135,7 +135,7 @@ describe('SignUp Controller', () => {
   test('Should return 500 if Authentication throws', async () => {
     const { sut, authenticationStub } = makeSut();
     vi.spyOn(authenticationStub, 'auth').mockImplementationOnce(throwError);
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
