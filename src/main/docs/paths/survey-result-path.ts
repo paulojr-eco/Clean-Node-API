@@ -43,5 +43,41 @@ export const surveyResultPath = {
         $ref: '#/components/serverError'
       }
     }
+  },
+  get: {
+    security: [{
+      apiKeyAuth: []
+    }],
+    tags: ['Enquete'],
+    summary: 'API para listar o resultado da enquete',
+    parameters: [{
+      in: 'path',
+      name: 'surveyId',
+      required: true,
+      schema: {
+        type: 'string'
+      }
+    }],
+    responses: {
+      200: {
+        description: 'Sucesso',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/surveyResult'
+            }
+          }
+        }
+      },
+      400: {
+        $ref: '#/components/badRequest'
+      },
+      403: {
+        $ref: '#/components/forbidden'
+      },
+      500: {
+        $ref: '#/components/serverError'
+      }
+    }
   }
 };

@@ -37,7 +37,7 @@ export default {
       name: 'Login'
     },
     {
-      name: 'Enquetes'
+      name: 'Enquete'
     }
   ],
   paths: {

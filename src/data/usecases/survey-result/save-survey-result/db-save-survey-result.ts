@@ -15,6 +15,7 @@ export class DbSaveSurveyResult implements SaveSurveyResult {
   async save (data: SaveSurveyResultParams): Promise<SurveyResultModel> {
     await this.saveSurveyResultRepository.save(data);
     const surveyResult = await this.loadSurveyResultRepository.loadBySurveyId(data.surveyId);
-    return surveyResult;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return surveyResult!;
   }
 }
