@@ -9,6 +9,7 @@ import { InvalidParamError } from '@/presentation/errors';
 import { mockSurveyResultModel, throwError } from '@/domain/test';
 import { mockLoadSurveyResult } from '@/presentation/test';
 import { type LoadSurveyResult } from '@/domain/usecases/survey-result/load-survey-result';
+import MockDate from 'mockdate';
 
 type SutTypes = {
   sut: LoadSurveyResultController
@@ -34,6 +35,14 @@ const mockRequest = (): HttpRequest => ({
 });
 
 describe('LoadSurveyResult Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   test('Should call LoadSurveyById with correct value', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     const loadByIdSpy = vi.spyOn(loadSurveyByIdStub, 'loadById');
