@@ -30,7 +30,7 @@ implements SaveSurveyResultRepository, LoadSurveyResultRepository {
     );
   }
 
-  async loadBySurveyId (surveyId: string): Promise<SurveyResultModel> {
+  async loadBySurveyId (surveyId: string): Promise<SurveyResultModel | null> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults'
     );
@@ -195,11 +195,13 @@ implements SaveSurveyResultRepository, LoadSurveyResultRepository {
     const surveyResult = await surveyResultCollection
       .aggregate(query)
       .toArray();
-    return {
-      surveyId: surveyResult[0].surveyId.toString(),
-      question: surveyResult[0].question,
-      answers: surveyResult[0].answers,
-      date: surveyResult[0].date
-    };
+    return surveyResult.length
+      ? {
+          surveyId: surveyResult[0].surveyId.toString(),
+          question: surveyResult[0].question,
+          answers: surveyResult[0].answers,
+          date: surveyResult[0].date
+        }
+      : null;
   }
 }
